@@ -1,0 +1,3 @@
+# Optional development tools only; the game has no third-party runtime dependencies.
+Pillow
+ruff
