@@ -1,6 +1,6 @@
 # Player guide
 
-[中文](player-guide.md) | [English](player-guide.en.md) · [Home](../README.en.md)
+[中文](player-guide.md) | [English](player-guide.en.md) · [Home](../README.md)
 
 ## Your first journey
 

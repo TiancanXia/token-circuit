@@ -1,6 +1,6 @@
 # 玩家指南
 
-[中文](player-guide.md) | [English](player-guide.en.md) · [返回首页](../README.md)
+[中文](player-guide.md) | [English](player-guide.en.md) · [返回首页](../README.zh-CN.md)
 
 ## 第一次旅程
 

@@ -1,6 +1,6 @@
 # 开发与贡献 · Development and contributing
 
-[中文首页](README.md) · [English home](README.en.md)
+[中文首页](README.zh-CN.md) · [English home](README.md)
 
 ## 中文
 

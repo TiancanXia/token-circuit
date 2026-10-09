@@ -1,6 +1,6 @@
 # 文档 · Documentation
 
-[中文首页](../README.md) · [English home](../README.en.md)
+[中文首页](../README.zh-CN.md) · [English home](../README.md)
 
 ## 玩家 · Players
 
