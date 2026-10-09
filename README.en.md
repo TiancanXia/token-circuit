@@ -26,7 +26,7 @@ Check Tk with `python3 -m tkinter`; some Linux distributions package Python Tk s
 
 This is a local desktop game; there is no browser version or model-weight download. Move toward Embedding and press **E**, then explore the rooms. Press **F** to see one complete forward pass immediately. Press **L** to switch the initial Chinese interface to English.
 
-![A forward pass and token transfer](assets/showcase/forward.gif)
+![A forward pass and token transfer](assets/showcase/forward.en.gif)
 
 ## Controls
 
