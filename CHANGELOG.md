@@ -2,7 +2,7 @@
 
 ## 0.1.0 — 2026-10-09
 
-Initial public preview / 首个公开预览版本。
+Initial public preview.
 
 - Three-level Transformer exploration with keyboard movement.
 - QKV, RoPE, head attention and output projection interiors.

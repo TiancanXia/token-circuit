@@ -1,5 +1,7 @@
 # Architecture and extension guide
 
+[English](architecture.md) | [简体中文](architecture.zh-CN.md) · [Documentation](README.md)
+
 ## Package boundaries
 
 ```text
@@ -89,7 +91,7 @@ Runtime Python files use standard Ruff formatting. Keep current reference docume
 
 ## Nested interiors and caches
 
-RoomSpec defines checkpoint labels/locations from data. Rooms stores per-stage visits and parent scene/position. E on a reached parent checkpoint opens the child using ForwardPass.preview: stored data for completed stages, or detached current-stage execution for a preview. Preview never changes the real executor, RNG or cache. Local checkpoints advance Visit.progress; only the final checkpoint calls the same Session._execute_step used by ordinary E/F. Re-entering preserves progress; completed visits remain inspectable without replay. M/Escape pops one level; F unwinds both interiors before using the shared road flight. G clears stale visits and rebuilds prerequisites. Tab returns to the module before changing its reached layer; N only selects a diagnostic query head.
+RoomSpec defines checkpoint labels/locations from data. Rooms stores per-stage visits and parent scene/position. E on a reached parent checkpoint opens the child using ForwardPass.preview: stored data for completed stages, or detached current-stage execution for a preview. Preview never changes the real executor, RNG or cache. Local checkpoints advance Visit.progress; only the final checkpoint calls the same Session._execute_step used by ordinary E/F. Re-entering preserves progress; completed visits remain inspectable without replay. M/Escape pops one level (Escape first leaves fullscreen when active); F unwinds both interiors before using the shared road flight. G clears stale visits and rebuilds prerequisites. Tab returns to the module before changing its reached layer; N only selects a diagnostic query head.
 
 ModelConfig separates query heads and KV heads; head_dim=dim/heads and kv_dim=num_kv_heads*head_dim. attention_mode/kv_head_for expose the layout to shared diagrams. The pure attention_trace operator computes grouped-head scores, visibility, probabilities and weighted V once; ordinary attention wraps the same implementation. A query at the final valid key needs no explicit mask; earlier queries mask future scores with -infinity. Per-row mask_applied diagnostics drive the view, including chunked-query cases. Projection matrices are stored output×input, hence row-vector formulas use X Wᵀ.
 
@@ -112,4 +114,4 @@ python -m ruff check tokenwalk game.py check_ui.py preview.py --select F
 python -m ruff format --check tokenwalk
 ```
 
-Current screenshots and animation used by the READMEs live in assets/showcase/ and are tracked. Bulk generated previews and historical planning documents remain local and ignored. See CONTRIBUTING.md for synchronization and publishing workflow.
+Current screenshots and animation used by the READMEs live in assets/showcase/ and are tracked. Bulk generated previews and historical planning documents remain local and ignored. See [CONTRIBUTING.md](../CONTRIBUTING.md) for synchronization and publishing workflow.

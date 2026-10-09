@@ -1,41 +1,41 @@
-# 玩家指南
+# Player guide
 
-[中文](player-guide.md) | [English](player-guide.en.md) · [返回首页](../README.zh-CN.md)
+[English](player-guide.md) | [简体中文](player-guide.zh-CN.md) · [Home](../README.md)
 
-## 第一次旅程
+## Your first journey
 
-1. 启动游戏，最下面只亮起句子的第一个 token。
-2. 用方向键或 WASD 靠近 Embedding，按 E / Enter 进入。
-3. 在房间中靠近装置，按 E 处理；完成后从亮起的出口离开。
-4. Attention 内还可以进入 QKV、RoPE、Head attention、Output 的内部地图。M 返回上一层，进度保留。
-5. 完成输出模块后，小人消散并在模型开头聚拢，句子亮起下一个 token；重复直到句子结束。
+1. Launch the game. Only the first token in the bottom sentence is lit.
+2. Move toward Embedding with arrows or WASD; press E / Enter to enter.
+3. Approach a device and press E to process it. Leave through the illuminated exit when finished.
+4. Inside Attention, enter QKV, RoPE, Head attention and Output rooms for another level of detail. M returns one level and keeps your progress.
+5. After the output stage, your character dissolves and reassembles at the beginning. The next token lights up. Repeat until the sentence ends.
 
-F 会快速走完当前的一次 forward。G 打开定位面板：左右选择 block 或输入/输出区，上下选择模块，Enter 定位；定位不会提前点亮下一个 token。
+F completes the current forward pass quickly. G opens the stage picker: left/right selects a block or input/output section, up/down selects a module, and Enter jumps there. A jump does not reveal the next token early.
 
-## 操作速查
+## Controls
 
-| 按键 | 功能 |
+| Key | Action |
 | --- | --- |
-| 方向键 / WASD | 移动 |
-| E / Enter | 进入、处理、离开 |
-| M / Esc | 返回上一层；Esc 先退出全屏，主地图退出 |
-| F | 快速完成当前一轮 |
-| G | 定位面板；再次 G 或 Esc 关闭 |
-| H | MHA / GQA 切换，重新开始 |
-| C | KV cache 开关，重新开始 |
-| N / Tab | 切换观察的 Q head / 已到达的层 |
-| L / R / F11 | 中英文切换 / 重新开始 / 全屏 |
+| Arrows / WASD | Move |
+| E / Enter | Enter, process or leave |
+| M / Esc | Return one level; Esc leaves fullscreen first, then exits on the world map |
+| F | Complete the current pass quickly |
+| G | Stage picker; G or Esc closes it |
+| H | Switch MHA / GQA and restart |
+| C | Toggle KV cache and restart |
+| N / Tab | Inspect another Q head / reached layer |
+| L / R / F11 | Change language / restart / fullscreen |
 
-点击说明按钮阅读模块文档。文档打开时游戏暂停；Esc 只关闭文档。语言切换会重新开始，保留当前注意力和缓存设置。
+Click an explanation button to read a module document. Reading pauses the game; Esc closes only the document. Changing language restarts the journey and keeps the attention and cache settings.
 
-## 常见问题
+## Questions
 
-**为什么有黑色格子？** 后续 token 尚未亮起，每完成一整轮才出现一个。
+**Why are there black cells?** Future tokens are hidden. Each full pass reveals one more.
 
-**下一个字为什么不是概率最高的字？** 旅程使用固定句子，文字与概率图独立；图里是未训练微型模型的计算结果。Top 7 保留原来的全词表概率，不会重新归一化。
+**Why isn't the next token the most probable one?** The journey follows a fixed sentence, independently of the probability chart. The chart contains actual results from an untrained miniature model. Top 7 preserves full-vocabulary probabilities without renormalizing them.
 
-**无法启动？** 需要 Python 3.10+、Tkinter 和图形桌面。先运行 `python -m tkinter` 检查 Tk。Windows 启动失败时窗口会保留错误信息，可附到问题反馈中。
+**The game will not start.** Python 3.10+, Tkinter and a graphical desktop are required. Try `python -m tkinter`. On Windows, the launcher keeps startup errors visible so you can include them in an issue.
 
-**需要 API key 或安装模型吗？** 不需要。游戏离线运行，运行时只使用 Python 标准库。
+**Do I need an API key or a model download?** No. Runtime uses only the Python standard library, offline.
 
-**怎样反馈？** 在 [Issues](https://github.com/TiancanXia/token-circuit/issues) 描述系统、Python 版本、操作步骤与报错；截图能帮助定位问题。
+**How can I report a problem?** Include your OS, Python version, reproduction steps and any errors in an [issue](https://github.com/TiancanXia/token-circuit/issues). Screenshots help.

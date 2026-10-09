@@ -40,7 +40,7 @@ This is a local desktop game; there is no browser version or model-weight downlo
 | Inspect another Q head / reached layer | N / Tab |
 | Switch language / restart / fullscreen | L / R / F11 |
 
-Explanation buttons open detailed documents and pause the game. See the [player guide](docs/player-guide.en.md) for the complete walkthrough.
+Explanation buttons open detailed documents and pause the game. See the [player guide](docs/player-guide.md) for the complete walkthrough.
 
 ## What you can explore
 
@@ -62,7 +62,7 @@ Only Transformer is currently playable. DiT and embodied-intelligence networks a
 
 ## Players and developers
 
-- Players: [English guide](docs/player-guide.en.md) · [中文指南](docs/player-guide.md)
+- Players: [English guide](docs/player-guide.md) · [中文指南](docs/player-guide.zh-CN.md)
 - Developers: [Development and contributing](CONTRIBUTING.md) · [Architecture and extension guide](docs/architecture.md) · [Documentation index](docs/README.md)
 - [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/TiancanXia/token-circuit/issues)
 

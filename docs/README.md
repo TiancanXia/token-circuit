@@ -1,17 +1,20 @@
-# 文档 · Documentation
+# Documentation
 
-[中文首页](../README.zh-CN.md) · [English home](../README.md)
+[English](README.md) | [简体中文](README.zh-CN.md) · [Home](../README.md)
 
-## 玩家 · Players
+## Players
 
-- [中文玩家指南](player-guide.md)
-- [English player guide](player-guide.en.md)
+- [Player guide](player-guide.md): controls, first journey and troubleshooting.
 
-## 开发者 · Developers
+## Developers
 
-- [开发流程与贡献 / Development and contributing](../CONTRIBUTING.md)
-- [代码分层与扩展 / Architecture](architecture.md)
-- [计算流程与边界 / Model notes](model-audit.md)
-- [更新记录 / Changelog](../CHANGELOG.md)
+- [Development and contributing](../CONTRIBUTING.md): setup, checks, Git workflow and contribution rules.
+- [Architecture and extension guide](architecture.md): package responsibilities, state and new interiors.
+- [Model notes](model-audit.md): computation, numerical limits and primary references.
 
-架构文档使用英文，模型核对使用中文；代码标识与公式使用英文。The architecture guide is in English; model notes are in Chinese. Identifiers and formulas use English.
+Each guide has a separate Chinese version accessible through its language switch. English is the default; `.zh-CN.md` identifies Chinese documents. Keep paired content and links aligned when editing.
+
+## Shared records
+
+- [Changelog](../CHANGELOG.md) — English only.
+- [MIT license](../LICENSE) — original English legal text.

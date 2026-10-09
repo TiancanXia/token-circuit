@@ -40,7 +40,7 @@ python3 game.py
 | 切换观察的 Q head / 已到达的层 | N / Tab |
 | 中英文切换 / 重新开始 / 全屏 | L / R / F11 |
 
-地图上的说明按钮打开详细文档；阅读期间游戏暂停。完整操作与常见问题见 [玩家指南](docs/player-guide.md)。
+地图上的说明按钮打开详细文档；阅读期间游戏暂停。完整操作与常见问题见 [玩家指南](docs/player-guide.zh-CN.md)。
 
 ## 可以探索什么
 
@@ -58,12 +58,12 @@ python3 game.py
 
 默认隐藏维度为 8，MHA 为 4Q/4KV，GQA 为 4Q/2KV；中文词表 16、英文词表 12。游戏按预定句子依次点亮 token，**旅程文字与概率图独立**；Top 7 显示全词表概率最高的七项，剩余概率另行标注，并不决定旅程的下一个字。中文按字、英文按词与标点划分，未使用生产模型 tokenizer。
 
-目前提供 Transformer。DiT、具身智能网络等属于可能的后续方向，尚未实现。更完整的计算边界见 [模型说明](docs/model-audit.md)。
+目前提供 Transformer。DiT、具身智能网络等属于可能的后续方向，尚未实现。更完整的计算边界见 [模型说明](docs/model-audit.zh-CN.md)。
 
 ## 玩家与开发者
 
-- 玩家：[中文指南](docs/player-guide.md) · [English guide](docs/player-guide.en.md)
-- 开发者：[开发与贡献 / Development](CONTRIBUTING.md) · [代码架构与扩展](docs/architecture.md) · [文档目录](docs/README.md)
+- 玩家：[中文指南](docs/player-guide.zh-CN.md) · [English guide](docs/player-guide.md)
+- 开发者：[开发与贡献 / Development](CONTRIBUTING.zh-CN.md) · [代码架构与扩展](docs/architecture.zh-CN.md) · [文档目录](docs/README.zh-CN.md)
 - [更新记录](CHANGELOG.md) · [反馈问题](https://github.com/TiancanXia/token-circuit/issues)
 
 ## 许可证与出处
