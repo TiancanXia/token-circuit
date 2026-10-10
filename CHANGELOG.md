@@ -2,13 +2,8 @@
 
 ## 0.1.0 — 2026-10-09
 
-Initial public preview.
-
-- Three-level Transformer exploration with keyboard movement.
-- QKV, RoPE, head attention and output projection interiors.
+- Transformer exploration with three map levels.
+- QKV, RoPE, head attention and output projection rooms.
 - MHA / GQA, KV cache, Dense FFN and MoE.
-- Stage navigation, fast forward flight and token transfer effects.
-- Chinese / English interface, handbook and player guides.
-- Standard-library runtime, tests and developer extension documentation.
-
-Scope: fixed untrained miniature model; the playable sentence is independent of the probability chart. Windows verified; other desktops not yet playtested.
+- Stage selection, fast forward and token transfer animation.
+- Chinese and English interface and module explanations.

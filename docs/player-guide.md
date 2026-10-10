@@ -36,6 +36,4 @@ Click an explanation button to read a module document. Reading pauses the game; 
 
 **The game will not start.** Python 3.10+, Tkinter and a graphical desktop are required. Try `python -m tkinter`. On Windows, the launcher keeps startup errors visible so you can include them in an issue.
 
-**Do I need an API key or a model download?** No. Runtime uses only the Python standard library, offline.
-
 **How can I report a problem?** Include your OS, Python version, reproduction steps and any errors in an [issue](https://github.com/TiancanXia/token-circuit/issues). Screenshots help.

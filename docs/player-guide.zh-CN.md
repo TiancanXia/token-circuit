@@ -36,6 +36,4 @@ F 会快速走完当前的一次 forward。G 打开定位面板：左右选择 b
 
 **无法启动？** 需要 Python 3.10+、Tkinter 和图形桌面。先运行 `python -m tkinter` 检查 Tk。Windows 启动失败时窗口会保留错误信息，可附到问题反馈中。
 
-**需要 API key 或安装模型吗？** 不需要。游戏离线运行，运行时只使用 Python 标准库。
-
 **怎样反馈？** 在 [Issues](https://github.com/TiancanXia/token-circuit/issues) 描述系统、Python 版本、操作步骤与报错；截图能帮助定位问题。

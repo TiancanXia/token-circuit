@@ -4,17 +4,12 @@
 
 ## Players
 
-- [Player guide](player-guide.md): controls, first journey and troubleshooting.
+- [Player guide](player-guide.md): controls and troubleshooting.
 
 ## Developers
 
-- [Development and contributing](../CONTRIBUTING.md): setup, checks, Git workflow and contribution rules.
-- [Architecture and extension guide](architecture.md): package responsibilities, state and new interiors.
-- [Model notes](model-audit.md): computation, numerical limits and primary references.
+- [Contributing](../CONTRIBUTING.md): setup, checks and Git workflow.
+- [Code structure](architecture.md): packages and execution state.
+- [Model notes](model-audit.md): computation and references.
 
-Each guide has a separate Chinese version accessible through its language switch. English is the default; `.zh-CN.md` identifies Chinese documents. Keep paired content and links aligned when editing.
-
-## Shared records
-
-- [Changelog](../CHANGELOG.md) — English only.
-- [MIT license](../LICENSE) — original English legal text.
+[Changelog](../CHANGELOG.md) · [MIT license](../LICENSE)
