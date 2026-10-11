@@ -38,7 +38,7 @@ class AttentionFlowTests(unittest.TestCase):
         self.assertEqual([mha.kv_head_for(h) for h in range(4)],[0,1,2,3])
         self.assertEqual([gqa.kv_head_for(h) for h in range(4)],[0,0,1,1])
         self.assertEqual([s.kind for s in build_stages(mha)],[s.kind for s in build_stages(gqa)])
-        self.assertEqual(build_stages(mha)[4].title,'Head attention')
+        self.assertEqual(build_stages(mha)[4].title,'SDPA · Concat')
         self.assertEqual(build_stages(mha)[5].title,'Output · W_o')
 
     def test_all_query_head_outputs_are_packed_once_before_wo(self):

@@ -40,17 +40,12 @@ ROOMS = {
 
 
 def specification(result, config):
-    """Refine labels from real diagnostics; checkpoint count/order stays stable."""
+    """Specialize head layout names without changing checkpoint count/order."""
     base = ROOMS[result.stage.kind]
     nodes = list(base.nodes)
     labels = list(base.label_keys)
     if base.kind == "qkv":
         nodes[4] = config.attention_mode + " heads"
-    elif base.kind == "attention" and not any(
-        result.details["traces"][0]["mask_applied"]
-    ):
-        nodes[2] = "All visible"
-        labels[2] = "step.attention.visible"
     return RoomSpec(base.kind, tuple(nodes), tuple(labels))
 
 

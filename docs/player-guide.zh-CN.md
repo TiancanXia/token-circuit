@@ -7,7 +7,7 @@
 1. 启动游戏，最下面只亮起句子的第一个 token。
 2. 用方向键或 WASD 靠近 Embedding，按 E / Enter 进入。
 3. 在房间中靠近装置，按 E 处理；完成后从亮起的出口离开。
-4. Attention 内还可以进入 QKV、RoPE、Head attention、Output 的内部地图。M 返回上一层，进度保留。
+4. Attention 内还可以进入 QKV、RoPE、SDPA / Concat、Output 的内部地图。M 返回上一层，进度保留。
 5. 完成输出模块后，小人消散并在模型开头聚拢，句子亮起下一个 token；重复直到句子结束。
 
 F 会快速走完当前的一次 forward。G 打开定位面板：左右选择 block 或输入/输出区，上下选择模块，Enter 定位；定位不会提前点亮下一个 token。
@@ -30,7 +30,7 @@ F 会快速走完当前的一次 forward。G 打开定位面板：左右选择 b
 
 ## Attention 观察台
 
-在 Head attention 的“分配权重”处点击 token 卡片查看贡献。查询旁的箭头选择已有 query，头按钮或 N 切换 head；长前缀可翻页。被屏蔽的未来位置贡献为零。这些操作只改变观察，不推进计算。说明按钮提供公式与算例。
+在 SDPA 的 Softmax 处点击 token 卡片，查看 Value V、它的加权贡献 p×V 和完整 head 输出。SDPA 是 Scaled Dot-Product Attention（缩放点积注意力），Concat 拼接各头输出。Query 旁的箭头选择查询位置，Q→KV 或 N 切换 head；长前缀可翻页。被屏蔽的未来位置贡献为零。这些操作只改变观察，不推进计算。说明按钮提供公式与算例。
 
 ## 常见问题
 

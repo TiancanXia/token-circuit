@@ -124,7 +124,8 @@ class DetailInterfaceTests(unittest.TestCase):
                 break
         g.jump_to(4)
         g.interact()
-        self.assertEqual(s.rooms.active.spec.nodes[2],'All visible')
+        self.assertEqual(s.rooms.active.spec.nodes[2],'Causal mask')
+        self.assertFalse(any(s.rooms.active.result.details['traces'][0]['mask_applied']))
         for cp in s.room_checkpoints[:3]:
             s.x,s.y=cp.x,cp.y
             g.interact()

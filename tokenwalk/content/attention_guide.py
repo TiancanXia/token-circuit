@@ -1,9 +1,9 @@
 """Layered bilingual attention explanation; only reads configuration."""
 
 FORMULA_TITLES = (
-    ("匹配分数", "Match score"),
-    ("可见位置的概率", "Causal probabilities"),
-    ("汇聚内容与输出投影", "Gather and project"),
+    ("Attention scores · 注意力分数", "Attention scores"),
+    ("Causal mask / Softmax", "Causal mask / Softmax"),
+    ("Weighted sum / Output projection", "Weighted sum / Output projection"),
 )
 
 SECTIONS = (
@@ -17,8 +17,8 @@ SECTIONS = (
     (
         ("图解与操作", "Diagram and controls"),
         (
-            "用查询旁的 ‹ › 选择位置，点击 token 卡片观察对应的 score、概率、V 与 p×V。卡片角标蓝色表示历史缓存，金色表示本轮计算；高亮强调所选位置，不可见的未来位置权重为零。“内容、贡献、汇聚结果”依次显示所选 V、它的加权贡献和完整 head 输出。向量条共用尺度；每张卡片的数字是第一个通道的值。点击头按钮或在子地图按 N 切换 head。长前缀用卡片上方的 ‹ › 翻页，输出仍包含所有位置。",
-            "Use ‹ › beside Query to choose a position. Click a token card to inspect its score, probability, V and p×V. Blue corner markers identify cached history and gold markers identify new computation; highlighting identifies selection; masked future positions have zero weight. Content, Contribution and Result show the selected V, its weighted contribution and the complete head output. Strips share one scale; each number is the first channel. Click the head button or press N in the child room to inspect another head. Page through long prefixes using the upper ‹ ›; output still includes every position.",
+            "用 Query 旁的 ‹ › 选择查询位置，点击 token 卡片观察对应的注意力分数、概率与 V。蓝色角标表示历史缓存，金色表示本轮计算；不可见的未来位置权重为零。Value V 是所选位置的值向量；p×V 是它对当前 head 的加权贡献；Output o 是所有位置贡献的加权和。向量条共用尺度，每张卡片的数字是第一个通道的值。点击 Q→KV 按钮或在子地图按 N 切换查询头；GQA 时多个查询头可对应同一个 KV head。长前缀用卡片上方的 ‹ › 翻页，输出仍包含所有位置。",
+            "Use ‹ › beside Query to choose a query position. Click a token card to inspect its attention score, probability and V. Blue corner markers identify cached history and gold markers identify new computation; masked future positions have zero weight. Value V is the selected value vector; p×V is its weighted contribution to this head; Output o is the weighted sum across all positions. Strips share one scale; each number is the first channel. Click Q→KV or press N in the child room to inspect another query head; GQA allows query heads to share a KV head. Page through long prefixes using the upper ‹ ›; output still includes every position.",
         ),
     ),
     (

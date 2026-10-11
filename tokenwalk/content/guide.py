@@ -102,7 +102,7 @@ TOPICS = {
         ),
     ),
     "attention": Topic(
-        "Head attention",
+        "Scaled Dot-Product Attention",
         (
             "每个 Q head 在可读位置中寻找匹配，再用概率汇聚对应的 V。多头并行，最后拼接一次。",
             "Each query head finds matches across visible positions and gathers its corresponding V using probability weights. Heads run independently and are packed once.",
@@ -129,8 +129,8 @@ TOPICS = {
             "W_o: {dim} × {dim}; {dim} → {dim} channels.",
         ),
         (
-            "拼接在 Head attention 的最后一步完成，这里不会再次拼接。下一步把分支结果加回 RMSNorm 前的残差流。",
-            "Packing happens at the end of Head attention and is not repeated here. The next stage adds this result to the stream preserved before RMSNorm.",
+            "Concat 在各头的 Scaled Dot-Product Attention 之后完成。这里对已拼接结果进行输出投影，下一步把分支结果加回 RMSNorm 前的残差流。",
+            "Concat follows the per-head Scaled Dot-Product Attention. Output projection uses that already-packed result; the next stage adds it to the stream preserved before RMSNorm.",
         ),
     ),
     "residual": Topic(

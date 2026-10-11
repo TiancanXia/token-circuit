@@ -3,7 +3,7 @@
 The query is at position $t$. Query head $h$ reads key/value head $g(h)$.
 RoPE has already been applied to $\mathbf q$ and $\mathbf k$.
 
-## Match score
+## Attention scores
 
 $$
 s_{tj}^{(h)} = \frac{\mathbf q_t^{(h)} \cdot \mathbf k_j^{(g(h))}}{\sqrt{d_h}}
@@ -18,7 +18,7 @@ p_{tj}^{(h)} = \begin{cases}
 \end{cases}
 $$
 
-## Gather and project
+## Weighted sum and output projection
 
 $$
 \begin{aligned}

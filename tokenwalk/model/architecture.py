@@ -92,7 +92,7 @@ CONTENT = {
         "在每个 head 内，按 token 的位置旋转 Q 和 K 的成对坐标。V 保持原样；不是把位置加到 embedding 上。",
     ),
     "attention": (
-        "Head attention",
+        "SDPA · Concat",
         "逐头注意力与拼接",
         "各 Q head 独立计算 QKᵀ/√d_head，屏蔽实际存在的未来位置，softmax 后加权汇聚所对应的 V，最后按 head 顺序拼接。MHA/GQA 决定 Q head 与 K/V head 的对应关系，不是额外的一步。",
     ),

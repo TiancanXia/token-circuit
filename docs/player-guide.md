@@ -7,7 +7,7 @@
 1. Launch the game. Only the first token in the bottom sentence is lit.
 2. Move toward Embedding with arrows or WASD; press E / Enter to enter.
 3. Approach a device and press E to process it. Leave through the illuminated exit when finished.
-4. Inside Attention, enter QKV, RoPE, Head attention and Output rooms for another level of detail. M returns one level and keeps your progress.
+4. Inside Attention, enter QKV, RoPE, SDPA / Concat and Output rooms for another level of detail. M returns one level and keeps your progress.
 5. After the output stage, your character dissolves and reassembles at the beginning. The next token lights up. Repeat until the sentence ends.
 
 F completes the current forward pass quickly. G opens the stage picker: left/right selects a block or input/output section, up/down selects a module, and Enter jumps there. A jump does not reveal the next token early.
@@ -30,7 +30,7 @@ Click an explanation button to read a module document. Reading pauses the game; 
 
 ## Attention inspector
 
-At Head attention / Weight, click token cards to inspect contributions. Query arrows select available query rows; the head button or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
+At SDPA / Softmax, click token cards to inspect Value V, its weighted contribution p×V and the complete head output. SDPA means Scaled Dot-Product Attention; Concat joins the head outputs. Query arrows select available query rows; Q→KV or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
 
 ## Questions
 
