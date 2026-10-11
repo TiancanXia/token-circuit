@@ -2,7 +2,8 @@
 
 from .charts import result_for, matrix, bars
 from .attention_glyphs import head_links
-from .painting import GOLD, TEXT, MUTED, mix
+from .painting import GOLD, TEXT, MUTED
+from .attention_probe import instrument
 
 
 def phase_caption(p, s, data):
@@ -57,6 +58,9 @@ def attention_world(p, s):
         return
     data = shown.details
     kind = shown.stage.kind
+    if kind == "attention":
+        instrument(p, s, data, s.attention_probe.head % s.forward.config.heads)
+        return
     if kind in ("qkv", "rope"):
         for col, key in enumerate(("q", "k", "v")):
             positions = data["positions"] if key == "q" or kind == "qkv" else None
@@ -77,50 +81,5 @@ def attention_world(p, s):
         p.text(307, 228, "→", 22, GOLD)
         p.text(48, 283, f"d_model = {s.forward.config.dim}", 10, MUTED, mono=True)
         p.text(375, 283, "W_o / channel mixing", 10, MUTED, mono=True)
-    else:
-        for head, weights in enumerate(data["all_attention"][:2]):
-            x = 58 + head * 283
-            n = len(weights[0])
-            keys = list(range(max(0, n - 6), n))
-            rows = list(zip(data["positions"], weights))[-6:]
-            cell = 15
-            kv = data["traces"][head]["kv_head"]
-            p.text(x, 157, f"Q HEAD {head + 1} → KV {kv + 1}", 10, GOLD, mono=True)
-            for col, key in enumerate(keys):
-                p.text(
-                    x + 40 + col * cell + 6,
-                    180,
-                    str(key),
-                    7,
-                    MUTED,
-                    anchor="n",
-                    mono=True,
-                )
-            for row_index, (position, row) in enumerate(rows):
-                label = f"{position}:{s.forward.config.vocab[s.forward.config.context[position]]}"
-                p.fit_text(x, 202 + row_index * cell, label, 37, 7, TEXT)
-                for col, key in enumerate(keys):
-                    px, py = x + 40 + col * cell, 198 + row_index * cell
-                    p.rect(
-                        px,
-                        py,
-                        cell - 2,
-                        cell - 2,
-                        mix("#263d49", GOLD, min(1, row[key] * 5)),
-                    )
-                    if key > position:
-                        p.line([(px + 2, py + 2), (px + 10, py + 10)], "#78909b")
-                    if position == n - 1:
-                        p.line(
-                            [(px, py + cell - 1), (px + cell - 2, py + cell - 1)], GOLD
-                        )
-            p.fit_text(
-                x,
-                286,
-                p.tr("attention_crop", rows=len(rows), keys=len(keys)),
-                250,
-                9,
-                MUTED,
-            )
     phase_caption(p, s, data)
     flow_caption(p, s, data)

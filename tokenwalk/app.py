@@ -91,6 +91,7 @@ class Game:
         )
         self.canvas.tag_bind("navigation-select", "<Button-1>", self.navigation_click)
         self.canvas.tag_bind("model-guide", "<Button-1>", lambda e: self.open_guide())
+        self.canvas.tag_bind("attention-choice", "<Button-1>", self.attention_click)
         self.canvas.bind("<Configure>", lambda e: self.draw())
         root.protocol("WM_DELETE_WINDOW", self.close)
         self.canvas.focus_set()
@@ -259,6 +260,39 @@ class Game:
                 if tag.startswith("stage:"):
                     self.jump_to(int(tag.split(":")[1]))
                     break
+
+    def attention_click(self, event):
+        for tag in self.canvas.gettags("current"):
+            if tag.startswith("probe:"):
+                _, action, value = tag.split(":")
+                self.select_attention(action, int(value))
+                break
+
+    def select_attention(self, action, value):
+        if not self.active or self.guide or self.navigation:
+            return
+        s = self.session
+        if s.scene not in ("micro", "detail"):
+            return
+        stage, result = focused_stage(s)
+        if stage.kind != "attention" or result is None:
+            return
+        probe = s.attention_probe
+        row, key = probe.indices(result.details)
+        if action == "key" and 0 <= value < len(result.details["k_matrix"]):
+            probe.key = value
+        elif action == "row":
+            probe.row = (row + value) % len(result.details["positions"])
+        elif action == "page":
+            probe.key = min(
+                max(0, key + 6 * value), len(result.details["k_matrix"]) - 1
+            )
+        elif action == "head":
+            if s.scene == "detail":
+                s.cycle_head()
+            else:
+                probe.head = (probe.head + 1) % s.forward.config.heads
+        self.draw()
 
     def open_guide(self):
         """Open a read-only snapshot; only the document owns its scroll/focus."""

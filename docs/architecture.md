@@ -48,6 +48,8 @@ Attention results contain head mapping, query positions, phase and per-row mask 
 
 `view/output.py` separates logits from probabilities. `output_summary` selects Top 7 and sums omitted probability without renormalizing. The default sentence follows its own sequence; `Session(guided=False)` uses the actual sample.
 
+Attention inspection state lives in `simulation/attention_probe.py`; its view reads stored traces. Detailed Attention content is in `content/attention_guide.py`. Formula PNGs are loaded by `view/formulas.py` from `assets/formulas`; `python -m tools.build_attention_assets` regenerates them using the optional developer tools.
+
 ## Checks
 
 See [contributing](../CONTRIBUTING.md) for commands. Tests cover numerical results, cache equivalence, scene transitions, input guards and both languages. Canvas previews and hidden Tk checks do not replace a visible playtest.

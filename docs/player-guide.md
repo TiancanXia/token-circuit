@@ -28,6 +28,10 @@ F completes the current forward pass quickly. G opens the stage picker: left/rig
 
 Click an explanation button to read a module document. Reading pauses the game; Esc closes only the document. Changing language restarts the journey and keeps the attention and cache settings.
 
+## Attention inspector
+
+At Head attention / Softmax, click token cards to inspect contributions. Query arrows select available query rows; Q→KV or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
+
 ## Questions
 
 **Why are there black cells?** Future tokens are hidden. Each full pass reveals one more.

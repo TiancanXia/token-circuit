@@ -5,6 +5,7 @@ from tkinter import ttk
 from ..content.guide import TOPICS, document, topic_for
 from ..i18n import Locale
 from .painting import BG, TEXT, MUTED, GOLD
+from .formulas import attention_images
 
 
 class GuideWindow:
@@ -126,6 +127,7 @@ class GuideWindow:
         self.text.tag_configure(
             "formula", font=(mono, -16), foreground="#a3cfdd", spacing1=4, spacing3=8
         )
+        self.formula_images = []
         self.show_topic(topic_for(topic))
         self.window.grab_set()
         self.text.focus_set()
@@ -139,10 +141,22 @@ class GuideWindow:
         page = document(topic, *self.context)
         self.text.configure(state="normal")
         self.text.delete("1.0", "end")
+        self.formula_images = []
         self.text.insert("end", page.title + "\n", "title")
         for index, (heading, body) in enumerate(page.sections):
             self.text.insert("end", heading + "\n", "heading")
-            self.text.insert("end", body + "\n", "formula" if index == 2 else ())
+            self.text.insert(
+                "end",
+                body + "\n",
+                "formula" if index == 2 and topic != "attention" else (),
+            )
+            if topic == "attention" and index == 3:
+                self.formula_images = attention_images(self.window)
+                for image in self.formula_images:
+                    self.text.image_create("end", image=image, padx=0, pady=8)
+                    self.text.insert("end", "\n")
+                if not self.formula_images:
+                    self.text.insert("end", TOPICS[topic].calculation + "\n", "formula")
         self.text.configure(state="disabled")
         self.text.yview_moveto(0.0)
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Interactive Attention query/key/head inspection and token contributions.
+- Layered bilingual Attention explanation with packaged formula images.
+
 ## 0.1.0 — 2026-10-09
 
 - Transformer exploration with three map levels.

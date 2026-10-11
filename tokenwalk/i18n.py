@@ -5,6 +5,19 @@ from .model.architecture import CONTENT
 
 
 TEXTS = {
+    "probe.query": ("查询 {position} · {token}", "Query {position} · {token}"),
+    "probe.pick": ("点击 token 查看贡献", "Click a token to inspect"),
+    "probe.masked": ("不可见", "Masked"),
+    "probe.cached": ("历史缓存", "Cached"),
+    "probe.new": ("本轮计算", "Computed"),
+    "probe.key": (
+        "位置 {index} · score {score:+.4f} · {status}",
+        "Key {index} · score {score:+.4f} · {status}",
+    ),
+    "probe.contribution": (
+        "所选 token 对第 1 通道的贡献 {value:+.4f} · 全部贡献之和 {total:+.4f}",
+        "Selected contribution to channel 1: {value:+.4f} · full sum: {total:+.4f}",
+    ),
     "guide.values": (
         "这里的模型尚未训练，数值用于观察计算过程。",
         "This model has not been trained; its values illustrate the calculation.",

@@ -88,6 +88,31 @@ def capture_guide(game, name):
                     fill=color,
                     font=preview_font(face == game.renderer.mono, abs(int(size))),
                 )
+        for kind, image_name, at in text.dump(index, following, image=True):
+            bounds = text.bbox(at)
+            if kind == "image" and bounds and guide.formula_images:
+                for number, formula in enumerate(guide.formula_images):
+                    if str(formula) == image_name:
+                        from tokenwalk.view.formulas import ASSETS
+
+                        source = Image.open(ASSETS / f"attention-{number}.png").convert(
+                            "RGBA"
+                        )
+                        source = source.resize(
+                            (formula.width(), formula.height()),
+                            Image.Resampling.LANCZOS,
+                        )
+                        bx, by, bw, bh = bounds
+                        if 0 <= by < text.winfo_height():
+                            source = source.crop(
+                                (
+                                    0,
+                                    0,
+                                    min(source.width, text.winfo_width() - bx),
+                                    min(source.height, text.winfo_height() - by),
+                                )
+                            )
+                            image.paste(source, (x + bx, y + by), source)
         index = following
     OUTPUT.mkdir(parents=True, exist_ok=True)
     image.save(OUTPUT / name)

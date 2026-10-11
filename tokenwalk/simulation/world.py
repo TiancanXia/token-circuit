@@ -5,6 +5,7 @@ import math
 from ..model.forward import ForwardPass
 from ..model.cache import KVCache
 from .rooms import Rooms, ROOMS
+from .attention_probe import AttentionProbe
 from .maps import (
     houses,
     all_groups,
@@ -46,6 +47,7 @@ class Session:
         self.cache_enabled = cache_enabled
         self.cache = KVCache()
         self.rooms = Rooms()
+        self.attention_probe = AttentionProbe()
         context = (
             self.initial_config.context[:1]
             if guided
@@ -353,6 +355,7 @@ class Session:
             forward.execute(previous)
         self.forward = forward
         self.rooms = Rooms()
+        self.attention_probe = AttentionProbe()
         self.flight = self.transfer = self.pending_token = None
         self.birth_time = self.flash = 0.0
         self.scene = "micro"
@@ -378,6 +381,7 @@ class Session:
         context = (self.forward.config.context + (idx,))[-self.window_size :]
         self.forward = self.new_forward(context)
         self.rooms = Rooms()
+        self.attention_probe = AttentionProbe()
         self.scene, self.group = "macro", None
         self.x, self.y = doorway("embedding")
         self.pending_token = None

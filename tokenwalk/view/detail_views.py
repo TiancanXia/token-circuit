@@ -1,6 +1,7 @@
 """Third-level diagrams read detached/stored results; they never run the model."""
 
 from .painting import GOLD, TEXT, MUTED
+from .attention_probe import instrument
 from .attention_glyphs import BLUE, vector, head_links, packed_heads, mask_grid
 
 
@@ -131,6 +132,9 @@ def attend(p, s, node, data, head):
     trace = data["traces"][head]
     if node == 0:
         cache_cells(p, s, data)
+        return
+    if node == 3:
+        instrument(p, s, data, head)
         return
     if node == 5:
         packed_heads(p, s, s.rooms.active.result.values, head)
@@ -272,6 +276,8 @@ def draw_detail(p, s):
         p.text(48, 218, p.tr("detail_order"), 12, MUTED)
     else:
         DRAWERS[visit.spec.kind](p, s, node, visit.result.details, visit.head)
+    if visit.spec.kind == "attention" and node == 3 and node <= visit.progress:
+        return
     key = f"brief.{visit.spec.kind}.{node}"
     if visit.spec.kind == "attention" and node == 0:
         key = "brief.attention.read." + visit.result.details["phase"]

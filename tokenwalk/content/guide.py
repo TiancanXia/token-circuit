@@ -342,6 +342,14 @@ def document(topic, config, language, guided, cache_enabled, phase):
         notes += "\n" + locale.text("guide.values")
     if guided and topic in ("softmax", "sample"):
         notes += "\n" + locale.text("journey_probs")
+    if topic == "attention":
+        from .attention_guide import sections
+
+        return Document(
+            item.title,
+            ((locale.text("guide.section.context"), context),)
+            + sections(config, language),
+        )
     values = (context, item.role[index], item.calculation, shape, notes)
     keys = ("context", "role", "calculation", "shape", "notes")
     return Document(
