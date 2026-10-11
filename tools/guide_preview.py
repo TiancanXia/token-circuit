@@ -3,6 +3,7 @@
 import tkinter as tk
 from PIL import Image, ImageDraw
 from tokenwalk.app import Game
+from tokenwalk.content.attention_guide import FORMULA_SECTION
 from tools.preview import OUTPUT, preview_font
 
 
@@ -137,9 +138,7 @@ def main():
             game.guide.window.transient("")
             game.guide.window.deiconify()
             capture_guide(game, f"preview-guide-{language}.png")
-            at = game.guide.text.search(
-                "符号与公式" if language == "zh" else "Symbols and formulas", "1.0"
-            )
+            at = game.guide.text.search(FORMULA_SECTION[language == "en"], "1.0")
             game.guide.text.yview(at)
             capture_guide(game, f"preview-guide-formulas-{language}.png")
             game.guide.text.yview_moveto(1.0)

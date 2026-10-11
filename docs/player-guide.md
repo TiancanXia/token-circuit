@@ -30,7 +30,9 @@ Click an explanation button to read a module document. Reading pauses the game; 
 
 ## Attention inspector
 
-At SDPA / Softmax, click token cards to inspect Value V, its weighted contribution p×V and the complete head output. SDPA means Scaled Dot-Product Attention; Concat joins the head outputs. Query arrows select available query rows; Q→KV or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
+Scores shows Q–K matching scores; Softmax shows attention weights. Click a token to highlight its connection. These percentages are not next-token probabilities.
+
+Query arrows appear when multiple rows are available. Q→KV or N changes the head; long prefixes have page arrows and a remaining-weight notice. These controls only change the view. Open the model guide for formulas and worked examples.
 
 ## Questions
 

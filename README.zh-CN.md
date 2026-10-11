@@ -40,7 +40,7 @@ H、C、L 会重新开始。Esc 根据当前界面关闭文档或定位面板、
 
 点击模块的说明按钮查看详细内容，阅读期间游戏暂停。
 
-在 Attention 中点击 token 查看注意力分数、概率与贡献。Query 旁的箭头切换位置，Q→KV 按钮切换 head。
+在 Attention 中沿 token 连线查看匹配分数和注意力权重。点击 token 高亮连线，Q→KV 按钮切换 head。点击「模型说明」阅读公式与算例。
 
 ![Attention 观察台](assets/showcase/attention-inspector.zh.png)
 

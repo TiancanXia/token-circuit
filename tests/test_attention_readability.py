@@ -41,22 +41,36 @@ class ReadabilityTests(unittest.TestCase):
             self.assertEqual(s.rooms.active.spec.nodes[-1], "Concat")
             self.assertEqual(tuple(s.checkpoint_title(i) for i in range(6)), expected)
 
-    def test_inspector_labels_explain_content_contribution_result(self):
+    def test_inspector_keeps_original_weights_when_selecting_a_token(self):
         s = self.g.session
         v = s.rooms.active
         v.progress = 3
         cp = v.spec.checkpoints()[3]
         s.x, s.y = cp.x, cp.y
-        self.g.draw()
+        self.g.select_attention("key", 2)
         words = [
             self.g.canvas.itemcget(i, "text")
             for i in self.g.canvas.find_all()
             if self.g.canvas.type(i) == "text"
         ]
-        self.assertIn("Value V", words)
-        self.assertIn("p × V", words)
-        self.assertIn("Output o", words)
-        self.assertNotIn("Σ pV", words)
+        weights = v.result.details["traces"][0]["weights"][-1]
+        for weight in weights:
+            self.assertIn(f"{weight:.1%}", words)
+
+    def test_single_query_does_not_offer_query_switching(self):
+        g = self.g
+        g.config = replace(g.config, context=(0,))
+        g.restart()
+        g.jump_to(4)
+        g.interact()
+        visit = g.session.rooms.active
+        visit.progress = 3
+        cp = visit.spec.checkpoints()[3]
+        g.session.x, g.session.y = cp.x, cp.y
+        g.draw()
+        tags = [tag for i in g.canvas.find_all() for tag in g.canvas.gettags(i)]
+        self.assertFalse(any(tag.startswith("probe:row:") for tag in tags))
+        self.assertTrue(any(tag.startswith("probe:head:") for tag in tags))
 
     def test_mask_operation_keeps_its_name_when_no_mask_is_needed(self):
         g = self.g
@@ -69,3 +83,26 @@ class ReadabilityTests(unittest.TestCase):
         self.assertFalse(
             any(g.session.rooms.active.result.details["traces"][0]["mask_applied"])
         )
+
+    def test_repeated_tokens_have_distinguishable_query_labels(self):
+        g = self.g
+        g.config = replace(g.config, context=(0, 0))
+        g.restart()
+        g.jump_to(4)
+        g.interact()
+        visit = g.session.rooms.active
+        visit.progress = 3
+        cp = visit.spec.checkpoints()[3]
+        g.session.x, g.session.y = cp.x, cp.y
+        labels = []
+        for _ in range(2):
+            g.select_attention("row", 1)
+            labels.append(
+                next(
+                    g.canvas.itemcget(i, "text")
+                    for i in g.canvas.find_all()
+                    if g.canvas.type(i) == "text"
+                    and g.canvas.itemcget(i, "text").startswith("Query")
+                )
+            )
+        self.assertNotEqual(labels[0], labels[1])

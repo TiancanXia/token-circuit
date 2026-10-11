@@ -347,8 +347,13 @@ def document(topic, config, language, guided, cache_enabled, phase):
 
         return Document(
             item.title,
-            ((locale.text("guide.section.context"), context),)
-            + sections(config, language),
+            sections(config, language)
+            + (
+                (
+                    locale.text("guide.section.context"),
+                    context + "\n" + locale.text("guide.values"),
+                ),
+            ),
         )
     values = (context, item.role[index], item.calculation, shape, notes)
     keys = ("context", "role", "calculation", "shape", "notes")

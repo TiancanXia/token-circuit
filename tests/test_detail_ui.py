@@ -65,7 +65,7 @@ class DetailInterfaceTests(unittest.TestCase):
         self.key('m',False)
         self.assertEqual(g.session.scene,'micro')
 
-    def test_cropped_weighted_sum_includes_omitted_contribution(self):
+    def test_long_prefix_weights_keep_omitted_mass(self):
         g=self.g
         g.guided=False
         g.config=replace(g.config,context=(0,1,2)*4)
@@ -74,14 +74,16 @@ class DetailInterfaceTests(unittest.TestCase):
         g.interact()
         s=g.session
         for cp in s.room_checkpoints:
-            if cp.index>4:
-                break  # Inspect weighted V before the separate Concat checkpoint.
+            if cp.index>3:
+                break
             s.x,s.y=cp.x,cp.y
             g.interact()
         texts=[g.canvas.itemcget(i,'text') for i in g.canvas.find_all() if g.canvas.type(i)=='text']
-        output=s.rooms.active.result.details['traces'][0]['outputs'][-1][0]
-        formula=next(t for t in texts if '省略贡献' in t)
-        self.assertIn(f'= {output:+.4f}',formula)
+        weights=s.rooms.active.result.details['traces'][0]['weights'][-1]
+        caption=next(t for t in texts if '其余权重' in t)
+        self.assertIn(f'{sum(weights[6:]):.1%}',caption)
+        for weight in weights[:6]:
+            self.assertIn(f'{weight:.1%}',texts)
 
     def test_h_c_reset_once_and_l_preserves_attention_settings(self):
         g=self.g

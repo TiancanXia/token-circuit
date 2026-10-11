@@ -2,29 +2,14 @@
 
 import math
 from .painting import GOLD, TEXT, MUTED
+from .charts import bars
 
 BLUE = "#87b8cc"
 
 
 def vector(p, x, y, values, label, width=552, color=GOLD):
-    p.fit_text(x, y, label, width, 11, color, mono=True)
-    if not values:
-        return
-    step = width / len(values)
-    for i, value in enumerate(values):
-        px = x + i * step
-        p.rect(px, y + 23, step - 4, 32, "#20394a")
-        p.fit_text(
-            px + (step - 4) / 2,
-            y + 31,
-            "−∞" if value == -math.inf else f"{value:+.2f}",
-            step - 4,
-            12,
-            color,
-            anchor="n",
-            mono=True,
-            tags="detail-number",
-        )
+    p.fit_text(x, y, label, width, 16, color)
+    bars(p, x, y + 28, values, width, 32)
 
 
 def head_links(p, s, head=0):
@@ -61,12 +46,12 @@ def head_links(p, s, head=0):
         187,
         p.tr("head_groups", mode=config.attention_mode, q=heads, kv=kv, shown=count),
         552,
-        11,
+        15,
         TEXT,
     )
 
 
-def packed_heads(p, s, values, head, caption="concat_order"):
+def packed_heads(p, s, values, head):
     c = s.forward.config
     count = min(c.heads, 8)
     width = 552 / count
@@ -81,15 +66,15 @@ def packed_heads(p, s, values, head, caption="concat_order"):
             width - 5,
             GOLD if h == head else BLUE,
         )
-    p.fit_text(
-        48,
-        280,
-        p.tr("concat_shape", q=c.heads, d=c.head_dim, total=c.dim, shown=count),
-        552,
-        12,
-        TEXT,
-    )
-    p.fit_text(48, 298, p.tr(caption), 552, 10, MUTED)
+    if count < c.heads:
+        p.fit_text(
+            48,
+            285,
+            p.tr("concat_shape", q=c.heads, d=c.head_dim, total=c.dim, shown=count),
+            552,
+            12,
+            MUTED,
+        )
 
 
 def mask_grid(p, data, head):
@@ -120,7 +105,6 @@ def mask_grid(p, data, head):
                 p.rect(px + 5, py + 5, 3, 3, "#849cac", tags="mask-hidden")
                 p.line([(px + 2, py + 2), (px + 10, py + 10)], BLUE)
     p.fit_text(
-        245, 217, p.tr("mask_axes", rows=len(queries), keys=len(keys)), 355, 10, TEXT
+        245, 217, p.tr("mask_axes", rows=len(queries), keys=len(keys)), 355, 13, TEXT
     )
-    p.fit_text(245, 249, "j > query position → −∞ → p = 0", 355, 10, BLUE, mono=True)
-    p.fit_text(245, 282, p.tr("mask_last"), 355, 8, MUTED)
+    p.fit_text(245, 257, p.tr("mask_last"), 355, 15, BLUE)

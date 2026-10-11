@@ -3,7 +3,7 @@
 import tkinter as tk
 from tkinter import ttk
 from ..content.guide import TOPICS, document, topic_for
-from ..content.attention_guide import FORMULA_TITLES
+from ..content.attention_guide import FORMULA_TITLES, FORMULA_SECTION
 from ..i18n import Locale
 from .painting import BG, TEXT, MUTED, GOLD
 from .formulas import attention_images
@@ -151,7 +151,10 @@ class GuideWindow:
                 body + "\n",
                 "formula" if index == 2 and topic != "attention" else (),
             )
-            if topic == "attention" and index == 3:
+            if (
+                topic == "attention"
+                and heading == FORMULA_SECTION[self.locale.language == "en"]
+            ):
                 self.formula_images = attention_images(self.window)
                 for titles, image in zip(FORMULA_TITLES, self.formula_images):
                     self.text.insert(

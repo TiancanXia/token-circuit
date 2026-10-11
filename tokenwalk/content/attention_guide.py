@@ -1,52 +1,53 @@
-"""Layered bilingual attention explanation; only reads configuration."""
+"""Bilingual attention handbook, progressing from intuition to the equations."""
 
 FORMULA_TITLES = (
     ("Attention scores · 注意力分数", "Attention scores"),
     ("Causal mask / Softmax", "Causal mask / Softmax"),
     ("Weighted sum / Output projection", "Weighted sum / Output projection"),
 )
+FORMULA_SECTION = ("公式与符号", "Formulas and symbols")
 
 SECTIONS = (
     (
-        ("直觉", "Intuition"),
+        ("Attention 做什么", "What Attention does"),
         (
-            "Q 是当前查询，K 提供匹配线索，V 携带要汇聚的内容。匹配分数经过 softmax 变成权重，再对 V 加权求和。较大的权重不一定带来较大的输出：V 的大小和正负也会影响贡献。",
-            "Q is the query, K provides matching features and V carries content. Softmax turns matching scores into weights, which form a weighted sum of V. A larger weight need not produce a larger output contribution: V has magnitude and sign too.",
-        ),
-    ),
-    (
-        ("图解与操作", "Diagram and controls"),
-        (
-            "用 Query 旁的 ‹ › 选择查询位置，点击 token 卡片观察对应的注意力分数、概率与 V。蓝色角标表示历史缓存，金色表示本轮计算；不可见的未来位置权重为零。Value V 是所选位置的值向量；p×V 是它对当前 head 的加权贡献；Output o 是所有位置贡献的加权和。向量条共用尺度，每张卡片的数字是第一个通道的值。点击 Q→KV 按钮或在子地图按 N 切换查询头；GQA 时多个查询头可对应同一个 KV head。长前缀用卡片上方的 ‹ › 翻页，输出仍包含所有位置。",
-            "Use ‹ › beside Query to choose a query position. Click a token card to inspect its attention score, probability and V. Blue corner markers identify cached history and gold markers identify new computation; masked future positions have zero weight. Value V is the selected value vector; p×V is its weighted contribution to this head; Output o is the weighted sum across all positions. Strips share one scale; each number is the first channel. Click Q→KV or press N in the child room to inspect another query head; GQA allows query heads to share a KV head. Page through long prefixes using the upper ‹ ›; output still includes every position.",
-        ),
-    ),
-    (
-        ("符号与公式", "Symbols and formulas"),
-        (
-            "t 为 query 位置，j 为 key 位置，h 为查询头，g(h) 为它读取的键值头。q、k、v 的通道数等于 head 维度；softmax 沿 key 位置计算，可见位置的概率和为 1。图中的匹配分数尚未经过屏蔽，未来位置在 softmax 前设为 −∞。点积除以 head 维度的平方根，可缓和分数随维度增长的尺度。o 是一个头的汇聚结果；H 个头拼接后，经 W_o 投影得到 y。",
-            "t is the query position, j the key position, h the query head and g(h) its key/value head. q, k and v have the width of one head. Softmax runs across key positions; visible probabilities sum to one. Displayed match scores are unmasked; future scores become −∞ before softmax. Dividing the dot product by the square root of head width moderates its scale. o is one head's result; concatenating H heads and projecting through W_o produces y.",
+            "让当前 token 汇集前文的信息。\n\nQ（Query）：用于查询。\nK（Key）：用于与 Q 匹配。\nV（Value）：携带要汇集的信息。\n\nQ 与各个 K 的匹配分数，经 Softmax 变成注意力权重，再用这些权重对 V 加权求和。",
+            "Let the current token gather information from earlier positions.\n\nQ (Query): the query.\nK (Key): what Q matches against.\nV (Value): the information to combine.\n\nSoftmax turns Q–K matching scores into attention weights. These weights determine the weighted sum of V.",
         ),
     ),
     (
         ("一个小例子", "A small example"),
         (
-            "若两个可见位置的权重为 0.25、0.75，V 分别为 [2, −1]、[0, 3]，贡献是 [0.5, −0.25] 与 [0, 2.25]，输出为 [0.5, 2]。加权求和沿位置进行，保留 head 的特征维度；并不是挑一个 V，也不是把概率当作输出向量。",
-            "For weights 0.25 and 0.75 with V=[2, −1] and [0, 3], contributions are [0.5, −0.25] and [0, 2.25]; output is [0.5, 2]. The sum runs across positions and preserves feature width. It neither selects a single V nor uses the probabilities themselves as the output vector.",
+            "假设两个位置的权重是 25% 和 75%，V 分别是 2 和 6。\n\n加权求和：0.25 × 2 + 0.75 × 6 = 5。\n\n实际的 V 是向量，每个通道都这样计算。权重大不代表贡献一定大，还要看 V 的数值。",
+            "Suppose two positions have weights of 25% and 75%, and V values of 2 and 6.\n\nWeighted sum: 0.25 × 2 + 0.75 × 6 = 5.\n\nReal V values are vectors; each channel follows this calculation. A larger weight need not mean a larger contribution: V matters too.",
         ),
     ),
     (
-        ("多头与 GQA", "Heads and GQA"),
+        ("怎么看图", "Reading the diagram"),
         (
-            "当前配置有 {heads} 个 Q head、{kv} 个 K/V head，每个 head {head_dim} 维。每个 Q head 独立计算 score 和输出；GQA 只共享 K/V，不合并 query。所有 Q head 输出拼接一次，再经 W_o 投影回 {dim} 维，之后进入残差连接。注意力权重描述本次匹配，不等同于语义解释或因果重要性。",
-            "This configuration has {heads} Q heads, {kv} K/V heads and {head_dim} channels per head. Every Q head computes its own scores and output. GQA shares K/V, not query outputs. All Q outputs are concatenated once and projected through W_o back to {dim} channels before the residual connection. Attention weights describe these matches; they are not a direct semantic explanation or measure of causal importance.",
+            "Query 是正在查看的查询。卡片在 Scores 处显示匹配分数，在 Softmax 处显示注意力权重；百分比不是下一个 token 的概率。\n\n点击卡片高亮对应连线。Query 箭头只在有多行可查看时出现，Q→KV 按钮或 N 切换 head。长前缀可以翻页；权重始终按全部位置计算。\n\n向量用色条表示：金色为正，蓝色为负，每组色条独立缩放。Concat 把各个 head 的输出接在一起，W_o 再混合这些特征。",
+            "Query is the query being inspected. Cards show matching scores at Scores and attention weights at Softmax. The percentages are not next-token probabilities.\n\nClick a card to highlight its connection. Query arrows appear only when multiple rows are available. Q→KV or N changes the head. Long prefixes have pages; weights always use all positions.\n\nVector bars use gold for positive values and blue for negative values, with each group scaled separately. Concat joins the head outputs; W_o then mixes their features.",
         ),
     ),
     (
-        ("缓存与因果性", "Cache and causality"),
+        FORMULA_SECTION,
         (
-            "每层复用旋转后的历史 K 和未旋转的 V，不缓存 Q，也不重复旋转旧 K。单 token 解码的 query 位于有效 key 的末尾，因此没有未来 key 可屏蔽；预填充的较早 query 或一次追加多个 token 时仍必须屏蔽未来位置。缓存不取消因果约束。若当前 trace 只有一个 query，‹ › 不会凭空生成历史 query。",
-            "Each layer reuses rotated historical K and unrotated V. Q is not cached, and old K is not rotated again. A single-token decoding query is at the end of valid keys, so no future key exists to mask. Earlier prefill queries and multi-token chunks still require masking. Cache does not remove causality. If a trace contains only one query, ‹ › cannot create historical query rows.",
+            "t 是 query 位置，j 是 key 位置，h 是查询头，g(h) 是它对应的 KV head，d 是一个 head 的维度。\n\n先计算 Q、K 的点积并除以 √d；需要时屏蔽未来位置。Softmax 沿 key 位置计算，权重合计为 1。o 是一个 head 的结果，y 是输出投影后的结果。",
+            "t is the query position, j the key position, h the query head, g(h) its KV head, and d the width of one head.\n\nCompute the Q–K dot product and divide by √d; mask future positions when needed. Softmax runs across key positions, with weights summing to 1. o is one head's result; y is the projected output.",
+        ),
+    ),
+    (
+        ("MHA 与 GQA", "MHA and GQA"),
+        (
+            "MHA：每个 Q head 有自己的 K/V head。\nGQA：一组 Q head 共用一个 K/V head。\n\n共享的是 K/V；每个 Q head 仍独立计算分数、权重和输出。当前有 {heads} 个 Q head、{kv} 个 KV head。\n\n所有 Q head 的结果拼接一次，W_o 将它投影回 {dim} 维，再进入残差连接。注意力权重不能直接当作语义解释或因果重要性。",
+            "MHA: each Q head has its own K/V head.\nGQA: a group of Q heads shares one K/V head.\n\nOnly K/V is shared. Each Q head still computes its own scores, weights and output. This model has {heads} Q heads and {kv} KV heads.\n\nConcat joins all Q head outputs once. W_o projects them back to {dim} channels before the residual connection. Attention weights are not a direct semantic explanation or measure of causal importance.",
+        ),
+    ),
+    (
+        ("KV cache 与 Causal mask", "KV cache and Causal mask"),
+        (
+            "KV cache 保存每层已算过的 K/V，后续 token 可以复用它们。保存的是 RoPE 后的 K 和未旋转的 V，不缓存 Q。\n\nCausal mask 保证查询看不到未来位置。单 token 解码时，已有 key 都在当前查询之前或同一位置，因此可以跳过显式屏蔽。\n\n预填充的较早查询、一次追加多个 token 时仍要屏蔽未来 key。打开缓存不会取消因果约束。",
+            "KV cache stores each layer's computed K/V for later tokens to reuse. It stores K after RoPE and unrotated V, not Q.\n\nCausal mask prevents a query from seeing future positions. In single-token decode, all existing keys are at or before the query, so explicit masking can be skipped.\n\nEarlier prefill queries and multi-token chunks still need future keys masked. Enabling cache does not remove causality.",
         ),
     ),
 )

@@ -2,9 +2,10 @@
 
 ## Unreleased
 
-- Interactive Attention query/key/head inspection and token contributions.
+- Interactive Attention query/key/head inspection with matching scores and attention weights.
 - Readable Attention checkpoints and bilingual explanations with TeX formulas compiled from Markdown.
 - Standard Attention terminology for scores, causal mask, Softmax, weighted sum and Concat.
+- Simpler Attention diagrams and an example-first bilingual handbook.
 
 ## 0.1.0 — 2026-10-09
 

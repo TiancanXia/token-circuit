@@ -22,22 +22,42 @@ TEXTS = {
     "step.attention.3": ("Softmax", "Softmax"),
     "step.attention.4": ("Weighted sum", "Weighted sum"),
     "step.attention.5": ("Concat", "Concat"),
-    "probe.content": ("Value V", "Value V"),
-    "probe.part": ("p × V", "p × V"),
-    "probe.total": ("Output o", "Output o"),
     "probe.head_hint": ("N · Q head {head}/{count}", "N · Q head {head}/{count}"),
     "probe.head": ("Q{head} → KV{kv}", "Q{head} → KV{kv}"),
     "probe.match": ("Attention scores", "Attention scores"),
-    "probe.weights": ("Attention weights", "Attention weights"),
     "probe.query": ("Query {position} · {token}", "Query {position} · {token}"),
-    "probe.pick": ("点击 token 查看贡献", "Click a token to inspect"),
-    "probe.masked": ("不可见", "Masked"),
-    "probe.cached": ("历史缓存", "Cached"),
-    "probe.new": ("本轮计算", "Computed"),
-    "probe.key": (
-        "位置 {index} · 匹配 {score:+.3f} · {status}",
-        "Position {index} · match {score:+.3f} · {status}",
+    "probe.pick": ("点击 token", "Click a token"),
+    "probe.scores_note": ("Q 与每个 K 的匹配分数", "How closely Q matches each K"),
+    "probe.weights_note": (
+        "Softmax 把分数变成权重 · 合计 100%",
+        "Softmax turns scores into weights · total 100%",
     ),
+    "probe.range": (
+        "显示位置 {start}–{end} / {total}",
+        "Positions {start}–{end} / {total}",
+    ),
+    "probe.crop": (
+        "显示 {shown}/{total} · 其余权重 {rest:.1%}",
+        "Showing {shown}/{total} · remaining weight {rest:.1%}",
+    ),
+    "attention.walk": ("沿路径依次处理节点。", "Walk through each step."),
+    "attention.read": (
+        "公式与计算说明\n点击下方「模型说明」",
+        "Formulas and calculations\nOpen the model guide below",
+    ),
+    "attention.qkv": (
+        "Q 用于查询 · K 用于匹配 · V 携带信息",
+        "Q queries · K matches · V carries information",
+    ),
+    "attention.rope": (
+        "让 Q、K 带上位置信息",
+        "Give Q and K their position information",
+    ),
+    "attention.project": (
+        "把各个 head 的结果混合起来",
+        "Mix the results of the attention heads",
+    ),
+    "probe.masked": ("不可见", "Masked"),
     "guide.values": (
         "这里的模型尚未训练，数值用于观察计算过程。",
         "This model has not been trained; its values illustrate the calculation.",
@@ -104,9 +124,15 @@ TEXTS = {
         "未来位置的概率为零",
         "Future positions receive zero probability",
     ),
-    "brief.attention.3": ("分数转为概率", "Turn scores into probabilities"),
-    "brief.attention.4": ("按概率汇聚 V", "Gather V using probabilities"),
-    "brief.attention.5": ("各头输出只拼接一次", "Pack head outputs once"),
+    "brief.attention.3": ("把分数变成注意力权重", "Turn scores into attention weights"),
+    "brief.attention.4": (
+        "按注意力权重，把 V 加起来",
+        "Add V using the attention weights",
+    ),
+    "brief.attention.5": (
+        "把各个 head 的结果接在一起",
+        "Join the results of all heads",
+    ),
     "brief.project.0": ("查看已拼接的输入", "Inspect the packed input"),
     "brief.project.1": ("混合特征通道", "Mix feature channels"),
     "brief.project.2": ("下一站：残差相加", "Next: residual addition"),
@@ -115,9 +141,15 @@ TEXTS = {
         "{mode} · {q}Q / {kv}KV · showing first {shown} Q heads",
     ),
     "cache_stats": (
-        "{phase} · 复用 {old} / 计算 {new} · 末 {shown} 个位置",
-        "{phase} · reused {old} / computed {new} · last {shown} positions",
+        "{phase} · 复用 {old} / 新增 {new} · 显示 {shown} 个",
+        "{phase} · reuse {old} / add {new} · {shown} shown",
     ),
+    "cache_legend": (
+        "蓝色：历史 K/V · 金色：本轮 K/V",
+        "Blue: previous K/V · gold: current K/V",
+    ),
+    "before": ("之前", "Before"),
+    "after": ("之后", "After"),
     "phase.prefill": ("预填充 / 全前缀", "Prefill / full prefix"),
     "phase.decode": ("单 token 解码", "Single-token decode"),
     "phase.full": ("全前缀重算", "Full-prefix recompute"),
@@ -133,28 +165,10 @@ TEXTS = {
         "{q} 个 Q head × {d} 维 = {total} 维 · 展示前 {shown} 个 head",
         "{q} Q heads × {d} channels = {total} channels · first {shown} heads shown",
     ),
-    "concat_order": (
-        "按 head 顺序拼接；GQA 共用 K/V，保留全部 Q head 的输出。",
-        "Pack in head order; GQA shares K/V while retaining every Q head output.",
-    ),
-    "packed_input": (
-        "已拼接的输入：保留每个 Q head 的输出，供 W_o 混合特征。",
-        "Already packed: every Q head output is retained for W_o to mix.",
-    ),
     "await_attention_stage": (
         "当前节点 {title} 尚未处理 · E 深入",
         "{title} has not run yet · E to explore",
     ),
-    "attention_layout": (
-        "MHA 独立 K/V · GQA 组内共享",
-        "MHA: separate K/V · GQA: shared K/V",
-    ),
-    "cache_size": (
-        "该层 K/V 共 {n} 个标量 · 相对 MHA 少 {saved} 个",
-        "Layer K/V: {n} scalars · {saved} fewer than MHA",
-    ),
-    "cache_off_note": ("缓存关闭 · 重算全部 K/V", "Cache OFF · recompute all K/V"),
-    "rope_absolute": ("沿用前缀绝对位置", "Keep the absolute prefix position"),
     "attention_positions": (
         "key {start}–{end} · query {pos}",
         "Keys {start}–{end} · query {pos}",
@@ -162,10 +176,6 @@ TEXTS = {
     "mask_last": (
         "越过当前 query 的 key 被遮住",
         "Hide keys beyond each query position",
-    ),
-    "project_residual": (
-        "下一站：与 RMSNorm 前保留的残差流相加。",
-        "Next: add the preserved stream from before RMSNorm.",
     ),
     "detail_hint": (
         "E 逐步处理 · M 返回上一层 · N 切换观察 head",
@@ -182,10 +192,6 @@ TEXTS = {
     ),
     "detail_level": ("{house} · 第 {n} 层 · {title}", "{house} · Layer {n} · {title}"),
     "detail_enter": ("E 深入", "E explore"),
-    "weighted_crop": (
-        "显示贡献 {shown:+.4f} + 省略贡献 {earlier:+.4f} = {total:+.4f}",
-        "Shown {shown:+.4f} + omitted {earlier:+.4f} = {total:+.4f}",
-    ),
     "attention_mode": ("H · {mode}", "H · {mode}"),
     "cache_mode": ("C · KV cache {state}", "C · KV cache {state}"),
     "on": ("开", "ON"),
@@ -263,12 +269,6 @@ TEXTS = {
         "Q 末 {rows} 行 × K 末 {keys} 列 · 原概率",
         "Last {rows} Q rows × {keys} K columns · original weights",
     ),
-    "attention_flow": (
-        "Scores → {visibility} → Softmax → PV → Concat → W_o",
-        "Scores → {visibility} → Softmax → PV → Concat → W_o",
-    ),
-    "all_visible": ("Mask (bypass)", "Mask (bypass)"),
-    "causal_visibility": ("Causal mask", "Causal mask"),
     "prefix": (
         "末 {n} 个前缀 token · 最后一个 = 小人",
         "Last {n} prefix tokens · last = your character",

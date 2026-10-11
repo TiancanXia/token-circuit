@@ -1,5 +1,7 @@
 """Render the attention instrument from a real guided six-token decode."""
 
+import argparse
+import sys
 import tkinter as tk
 from tokenwalk.app import Game
 from tools.preview import capture, verify_panel
@@ -31,19 +33,47 @@ def prepare(game):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--visible", action="store_true", help="Also verify actual visible windows"
+    )
+    args = parser.parse_args()
+    if args.visible and sys.platform == "win32":
+        import ctypes
+
+        # Tk coordinates and screenshot pixels must use the same DPI space.
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
     root = tk.Tk()
-    root.withdraw()
+    if not args.visible:
+        root.withdraw()
     game = Game(root, animate=False)
     for language in ("zh", "en"):
         if game.language != language:
             game.toggle_language()
         prepare(game)
         for width, height in ((1260, 854), (960, 660)):
-            game.canvas.winfo_width = lambda: width
-            game.canvas.winfo_height = lambda: height
+            if args.visible:
+                root.geometry(f"{width}x{height}+80+60")
+                root.update()
+            else:
+                game.canvas.winfo_width = lambda: width
+                game.canvas.winfo_height = lambda: height
             game.draw()
             verify_panel(game)
             capture(game, f"attention-instrument-{language}-{width}.png")
+            if args.visible:
+                from PIL import ImageGrab
+                from tools.preview import OUTPUT
+
+                def screenshot():
+                    x, y = game.canvas.winfo_rootx(), game.canvas.winfo_rooty()
+                    ImageGrab.grab(bbox=(x, y, x + width, y + height)).save(
+                        OUTPUT / f"attention-window-{language}-{width}.png"
+                    )
+                    root.quit()
+
+                root.after(300, screenshot)
+                root.mainloop()
         game.open_guide()
         game.guide.window.update_idletasks()
         assert len(game.guide.formula_images) == 3

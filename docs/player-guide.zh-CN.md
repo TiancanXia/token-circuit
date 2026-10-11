@@ -30,7 +30,9 @@ F 会快速走完当前的一次 forward。G 打开定位面板：左右选择 b
 
 ## Attention 观察台
 
-在 SDPA 的 Softmax 处点击 token 卡片，查看 Value V、它的加权贡献 p×V 和完整 head 输出。SDPA 是 Scaled Dot-Product Attention（缩放点积注意力），Concat 拼接各头输出。Query 旁的箭头选择查询位置，Q→KV 或 N 切换 head；长前缀可翻页。被屏蔽的未来位置贡献为零。这些操作只改变观察，不推进计算。说明按钮提供公式与算例。
+Scores 显示 Q、K 的匹配分数；Softmax 显示注意力权重。点击 token 高亮对应连线。这些百分比不是下一个 token 的概率。
+
+有多行可查看时，Query 旁会出现切换箭头。Q→KV 或 N 切换 head；长前缀可以翻页，并显示其余权重。这些操作只改变观察。点击「模型说明」阅读公式与算例。
 
 ## 常见问题
 

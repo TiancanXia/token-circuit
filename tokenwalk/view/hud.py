@@ -48,15 +48,21 @@ def sidebar(p, s):
     output_stage = stage.kind in ("unembedding", "softmax", "sample")
     values = result.values if result else []
     label = p.tr("result." + result.label) if result else p.tr("wait")
-    p.text(662, 313, label, 10, MUTED, width=213)
-    bars(p, 662, 350, values, 212, 25)
-    if output_stage:
-        p.text(662, 386, p.tr("vocab_size", n=len(f.config.vocab)), 10, MUTED)
+    in_attention = s.scene in ("micro", "detail") and s.group.house == "attention"
+    if in_attention:
+        p.text(662, 326, p.tr("attention.walk"), 16, TEXT, width=213)
+        p.text(662, 382, p.tr("attention.read"), 13, MUTED, width=213)
     else:
+        p.text(662, 313, label, 10, MUTED, width=213)
+        bars(p, 662, 350, values, 212, 25)
         p.text(
             662,
             386,
-            f"{len(values)} channels" if result else p.tr("not_computed"),
+            p.tr("vocab_size", n=len(f.config.vocab))
+            if output_stage
+            else f"{len(values)} channels"
+            if result
+            else p.tr("not_computed"),
             10,
             MUTED,
         )
@@ -83,7 +89,7 @@ def sidebar(p, s):
             11,
             GOLD,
         )
-    else:
+    elif not in_attention:
         p.text(662, 424, p.tr("signs"), 10, MUTED)
     p.rect(662, 452, 214, 28, "#1c3342", tags="model-guide")
     p.text(676, 458, p.tr("guide.button"), 12, GOLD, tags="model-guide")
