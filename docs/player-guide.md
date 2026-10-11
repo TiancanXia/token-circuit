@@ -32,7 +32,9 @@ Click an explanation button to read a module document. Reading pauses the game; 
 
 Scores shows Q–K matching scores; Softmax shows attention weights. Click a token to highlight its connection. These percentages are not next-token probabilities.
 
-Query arrows appear when multiple rows are available. Q→KV or N changes the head; long prefixes have page arrows and a remaining-weight notice. These controls only change the view. Open the model guide for formulas and worked examples.
+Click a Q button or press N to change the head in any Attention room. The Q→KV label identifies its key/value group; heads in a GQA group share K/V. You can also click the heads in the mapping and Concat diagrams. W_o shows the selected head's contribution alongside the full output.
+
+Query arrows appear when multiple rows are available; long prefixes have page arrows and a remaining-weight notice. These controls only change the view. Cached single-token decode skips the mask checkpoint when there are no future keys. Open the model guide for formulas and worked examples.
 
 ## Questions
 

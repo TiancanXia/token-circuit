@@ -10,6 +10,7 @@ from .simulation.navigation import StageNavigator
 from .view.renderer import Renderer, BG
 from .view.context import focused_stage
 from .view.guide_window import GuideWindow
+from .view.window_icon import install_window_icon
 from .i18n import Locale
 
 ACTION_KEYS = frozenset(
@@ -52,6 +53,7 @@ class Game:
         root.geometry("1260x854")
         root.minsize(960, 660)
         root.configure(bg=BG)
+        self.window_icon = install_window_icon(root)
         self.canvas = tk.Canvas(root, bg=BG, highlightthickness=0, takefocus=True)
         self.canvas.pack(fill="both", expand=True)
         self.renderer = Renderer(self.canvas)
@@ -274,6 +276,13 @@ class Game:
         s = self.session
         if s.scene not in ("micro", "detail"):
             return
+        if action in ("head", "select_head"):
+            if action == "head":
+                s.cycle_head(value)
+            else:
+                s.select_head(value)
+            self.draw()
+            return
         stage, result = focused_stage(s)
         if stage.kind != "attention" or result is None:
             return
@@ -287,11 +296,6 @@ class Game:
             probe.key = min(
                 max(0, key + 6 * value), len(result.details["k_matrix"]) - 1
             )
-        elif action == "head":
-            if s.scene == "detail":
-                s.cycle_head()
-            else:
-                probe.head = (probe.head + 1) % s.forward.config.heads
         self.draw()
 
     def open_guide(self):

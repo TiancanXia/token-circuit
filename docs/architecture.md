@@ -55,6 +55,8 @@ KV cache stores each layer's rotated K and unrotated V. It is reused when the mo
 
 Attention results contain head mapping, query positions, phase and per-row mask diagnostics. Child drawings read these snapshots. Concat occurs once before W_o.
 
+`view/head_controls.py` provides shared head selection. `Session.select_head` synchronizes parent and child views without executing stages. W_o snapshots include each head's output contribution and their combined output. `RoomSpec.operation_indices` maps shortened decode routes to the original diagram operations; mask checkpoints remain whenever future keys need masking.
+
 `view/output.py` separates logits from probabilities. `output_summary` selects Top 7 and sums omitted probability without renormalizing. The default sentence follows its own sequence; `Session(guided=False)` uses the actual sample.
 
 Attention inspection state lives in `simulation/attention_probe.py`; its view reads stored traces. `RoomSpec.label_keys` provides translated checkpoint names independently of operation identifiers. Detailed content is in `content/attention_guide.py`. TeX formulas are authored as `$$` blocks in `content/attention_math.md`; `python -m tools.build_attention_assets` compiles them with LaTeX and dvipng. `view/formulas.py` loads the packaged PNGs from `assets/formulas`.

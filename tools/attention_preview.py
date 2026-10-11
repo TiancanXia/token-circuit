@@ -48,8 +48,9 @@ def main():
                     game.interact()
                     assert s.rooms.active.progress==node.index+1
                     verify_panel(game)
-                    if node.index in {'qkv':(1,4),'rope':(1,2),'attention':(0,1,2,3,4,5),'project':(0,1)}[kind]:
-                        capture(game,f'preview-detail-{kind}-{node.index}-{language}.png')
+                    operation = s.rooms.active.spec.operation_index(node.index)
+                    if operation in {'qkv':(1,4),'rope':(1,2),'attention':(0,1,2,3,4,5),'project':(0,1,2)}[kind]:
+                        capture(game,f'preview-detail-{kind}-{operation}-{language}.png')
                     if kind=='attention' and node.index==0 and language=='en':
                         game.canvas.winfo_width=lambda:960
                         game.canvas.winfo_height=lambda:660

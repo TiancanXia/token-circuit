@@ -101,13 +101,28 @@ class Session:
         stage = self.forward.stages[index]
         return "Next token" if self.guided and stage.kind == "sample" else stage.title
 
-    def cycle_head(self):
-        if self.scene != "detail":
+    @property
+    def selected_head(self):
+        return (
+            self.rooms.active.head
+            if self.scene == "detail"
+            else self.attention_probe.head
+        )
+
+    def select_head(self, head):
+        if self.scene not in ("micro", "detail") or self.group.house != "attention":
             return False
-        visit = self.rooms.active
-        visit.head = (visit.head + 1) % self.forward.config.heads
-        self.say(self.tr("head_hint", n=visit.head + 1))
+        if not 0 <= head < self.forward.config.heads:
+            return False
+        self.attention_probe.head = head
+        if self.scene == "detail":
+            self.rooms.active.head = head
         return True
+
+    def cycle_head(self, delta=1):
+        return self.select_head(
+            (self.selected_head + delta) % self.forward.config.heads
+        )
 
     @property
     def token(self):

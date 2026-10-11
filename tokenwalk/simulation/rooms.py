@@ -1,6 +1,7 @@
 """Registered child rooms and visits, independent of graphics and input bindings."""
 
 from dataclasses import dataclass, field
+
 from .maps import Checkpoint
 
 
@@ -9,6 +10,10 @@ class RoomSpec:
     kind: str
     nodes: tuple
     label_keys: tuple = ()
+    operation_indices: tuple = ()
+
+    def operation_index(self, index):
+        return self.operation_indices[index] if self.operation_indices else index
 
     def checkpoints(self):
         count = len(self.nodes)
@@ -40,13 +45,22 @@ ROOMS = {
 
 
 def specification(result, config):
-    """Specialize head layout names without changing checkpoint count/order."""
+    """Specialize layouts and omit a decode mask only when every query is visible."""
     base = ROOMS[result.stage.kind]
     nodes = list(base.nodes)
     labels = list(base.label_keys)
+    operations = ()
     if base.kind == "qkv":
         nodes[4] = config.attention_mode + " heads"
-    return RoomSpec(base.kind, tuple(nodes), tuple(labels))
+    elif (
+        base.kind == "attention"
+        and result.details.get("phase") == "decode"
+        and not any(any(trace["mask_applied"]) for trace in result.details["traces"])
+    ):
+        operations = tuple(i for i in range(len(nodes)) if i != 2)
+        nodes = [nodes[i] for i in operations]
+        labels = [labels[i] for i in operations]
+    return RoomSpec(base.kind, tuple(nodes), tuple(labels), operations)
 
 
 @dataclass
@@ -76,8 +90,10 @@ class Rooms:
         if visit is None:
             result = session.forward.preview(index)
             spec = specification(result, session.forward.config)
-            visit = Visit(index, spec, result)
+            visit = Visit(index, spec, result, head=session.attention_probe.head)
             self.visits[index] = visit
+        spec = visit.spec
+        visit.head = session.attention_probe.head
         if index < session.forward.next_index:
             visit.progress = len(spec.nodes)
         self.parents.append((session.scene, session.x, session.y))

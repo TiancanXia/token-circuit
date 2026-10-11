@@ -55,6 +55,8 @@ KV cache 保存每层旋转后的 K 和未旋转的 V。模型相同、上下文
 
 Attention 结果包含头映射、query 位置、计算阶段与逐行 mask 诊断，子地图读取这些快照。Concat 只在 W_o 前发生一次。
 
+`view/head_controls.py` 提供统一 head 选择控件，`Session.select_head` 同步父层和子地图，不执行计算。W_o 快照包含各 head 的输出贡献与合并结果。`RoomSpec.operation_indices` 将精简后的解码路线映射到原图表操作；存在未来 key 需要屏蔽时仍保留 mask 检查点。
+
 `view/output.py` 分开 logits 与概率。`output_summary` 选择 Top 7 并累计省略概率，不重新归一化。默认句子按自身顺序推进，`Session(guided=False)` 使用实际抽样。
 
 Attention 观察状态位于 `simulation/attention_probe.py`，视图只读已存诊断。`RoomSpec.label_keys` 提供独立于算子标识的中英文节点名。详细说明在 `content/attention_guide.py`。TeX 公式写在 `content/attention_math.md` 的 `$$` 块中，`python -m tools.build_attention_assets` 使用 LaTeX 和 dvipng 编译。`view/formulas.py` 从 `assets/formulas` 读取打包的 PNG。

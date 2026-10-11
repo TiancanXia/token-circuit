@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mouse head selection across Attention rooms, per-head W_o contributions and shorter cached decode routes.
+- Clearer model dimension labels and a pixel character window icon.
 - Interactive Attention query/key/head inspection with matching scores and attention weights.
 - Readable Attention checkpoints and bilingual explanations with TeX formulas compiled from Markdown.
 - Standard Attention terminology for scores, causal mask, Softmax, weighted sum and Concat.

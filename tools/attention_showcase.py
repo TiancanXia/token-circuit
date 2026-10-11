@@ -23,10 +23,12 @@ def prepare(game):
     )
     game.jump_to(index)
     game.interact()
-    for cp in s.rooms.active.spec.checkpoints()[:3]:
+    spec = s.rooms.active.spec
+    target = next(i for i in range(len(spec.nodes)) if spec.operation_index(i) == 3)
+    for cp in spec.checkpoints()[:target]:
         s.x, s.y = cp.x, cp.y
         game.interact()
-    cp = s.rooms.active.spec.checkpoints()[3]
+    cp = spec.checkpoints()[target]
     s.x, s.y = cp.x, cp.y
     game.select_attention("key", 2)
     return s

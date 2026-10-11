@@ -24,14 +24,8 @@ def instrument(p, s, data, head, scores=False):
     p.fit_text(
         79, 188, p.tr("probe.query", position=item.position, token=query), 147, 17, GOLD
     )
-    button(
-        p,
-        268,
-        185,
-        166,
-        p.tr("probe.head", head=head + 1, kv=item.kv_head + 1),
-        "head",
-        1,
+    p.fit_text(
+        268, 190, p.tr("probe.match" if scores else "probe.weight"), 166, 14, BLUE
     )
     if len(context) > 6:
         button(p, 548, 185, 23, "‹", "page", -1)

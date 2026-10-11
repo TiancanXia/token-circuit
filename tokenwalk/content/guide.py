@@ -65,8 +65,8 @@ TOPICS = {
             "{dim} → {dim} channels; normalize features without mixing token positions.",
         ),
         (
-            "不减去均值，区别于 LayerNorm。γ 控制通道缩放，ε 避免除以零；残差旁路保留归一化前的流。",
-            "Unlike LayerNorm, RMSNorm does not subtract the mean. γ scales channels and ε prevents division by zero. Residual paths preserve the stream before normalization.",
+            "不减去均值，区别于 LayerNorm。γ 为通道缩放系数，这里 γ=1、ε=10⁻⁶；残差旁路保留归一化前的流。",
+            "Unlike LayerNorm, RMSNorm does not subtract the mean. γ scales channels; here γ=1 and ε=10⁻⁶. Residual paths preserve the stream before normalization.",
         ),
     ),
     "qkv": Topic(
@@ -75,10 +75,10 @@ TOPICS = {
             "同一份归一化输入分别投影为查询 Q、匹配线索 K 和内容 V。先投影，再按 head 拆分。",
             "Project the same normalized input into queries Q, matching features K and content V, then split channels into heads.",
         ),
-        "Q = X Wqᵀ\nK = X Wkᵀ\nV = X Wvᵀ\nq_head → kv_head = floor(q_head / group_size)",
+        "Q = X Wqᵀ\nK = X Wkᵀ\nV = X Wvᵀ",
         (
-            "Wq: {dim} × {dim}；Wk/Wv: {kv_dim} × {dim}。{heads} 个 Q head，{kv} 个 K/V head，每个 head {head_dim} 维。",
-            "Wq: {dim} × {dim}; Wk/Wv: {kv_dim} × {dim}. {heads} Q heads and {kv} K/V heads, each {head_dim} channels.",
+            "Wq: {dim} × {dim}；Wk/Wv: {kv_dim} × {dim}。{heads} 个 Q head，{kv} 个 KV head，每个 head 的维度 d_head = {head_dim}。",
+            "Wq: {dim} × {dim}; Wk/Wv: {kv_dim} × {dim}. {heads} Q heads and {kv} KV heads, each with width d_head = {head_dim}.",
         ),
         (
             "MHA 每个 Q head 有独立 K/V；GQA 组内共享 K/V；MQA 所有 Q 共用一组 K/V。Q head 始终独立计算，K 和 V 权重也独立。",
@@ -129,8 +129,8 @@ TOPICS = {
             "W_o: {dim} × {dim}; {dim} → {dim} channels.",
         ),
         (
-            "Concat 在各头的 Scaled Dot-Product Attention 之后完成。这里对已拼接结果进行输出投影，下一步把分支结果加回 RMSNorm 前的残差流。",
-            "Concat follows the per-head Scaled Dot-Product Attention. Output projection uses that already-packed result; the next stage adds it to the stream preserved before RMSNorm.",
+            "Concat 在各头的 Scaled Dot-Product Attention 之后完成。所选 head 使用 W_o 对应的列块计算贡献；各 head 的贡献相加，得到完整输出。下一步把结果加回 RMSNorm 前的残差流。",
+            "Concat follows the per-head Scaled Dot-Product Attention. Each head contributes through its corresponding columns of W_o; summing these contributions gives the full output. The next stage adds it to the stream preserved before RMSNorm.",
         ),
     ),
     "residual": Topic(
@@ -157,8 +157,8 @@ TOPICS = {
         ),
         "h = x W_upᵀ",
         (
-            "W_up: {hidden} × {dim}；{dim} → {hidden} 维。",
-            "W_up: {hidden} × {dim}; {dim} → {hidden} channels.",
+            "W_up: {hidden} × {dim}；d_model = {dim} → d_ff = {hidden}。",
+            "W_up: {hidden} × {dim}; d_model = {dim} → d_ff = {hidden}.",
         ),
         (
             "线性投影，不是图片上采样；不混合不同 token。完整 FFN 是 Up → GELU → Down。",
@@ -173,8 +173,8 @@ TOPICS = {
         ),
         "GELU(x) ≈ 0.5 x [1 + tanh(sqrt(2/π) (x + 0.044715 x³))]",
         (
-            "{hidden} → {hidden} 维，逐通道计算。",
-            "{hidden} → {hidden} channels, element by element.",
+            "d_ff = {hidden}，逐通道计算，维度不变。",
+            "d_ff = {hidden}; apply element by element without changing width.",
         ),
         (
             "使用常见 tanh 近似。它不是二值开关，也不会把所有负值直接变成零。",
@@ -187,10 +187,10 @@ TOPICS = {
             "将扩展、激活后的特征映射回模型维度，准备进行残差相加。",
             "Project expanded, activated features back to model width before the residual addition.",
         ),
-        "y = GELU(x W_upᵀ) W_downᵀ",
+        "h = GELU(x W_upᵀ)\ny = h W_downᵀ",
         (
-            "W_down: {dim} × {hidden}；{hidden} → {dim} 维。",
-            "W_down: {dim} × {hidden}; {hidden} → {dim} channels.",
+            "W_down: {dim} × {hidden}；d_ff = {hidden} → d_model = {dim}。",
+            "W_down: {dim} × {hidden}; d_ff = {hidden} → d_model = {dim}.",
         ),
         (
             "Up 和 Down 的权重独立，不互为逆矩阵。",
@@ -221,8 +221,8 @@ TOPICS = {
         ),
         "expert_e(x) = GELU(x W_up,eᵀ) W_down,eᵀ",
         (
-            "每个专家：{dim} → {hidden} → {dim} 维，拥有独立权重。",
-            "Each expert: {dim} → {hidden} → {dim} channels, with independent weights.",
+            "每个专家：d_model → d_ff → d_model（{dim} → {hidden} → {dim}），拥有独立权重。",
+            "Each expert: d_model → d_ff → d_model ({dim} → {hidden} → {dim}), with independent weights.",
         ),
         (
             "专家是并行分支，各自拥有独立权重，可以对同一个输入产生不同的特征变换。",
@@ -321,6 +321,7 @@ def document(topic, config, language, guided, cache_enabled, phase):
         blocks=len(config.blocks),
         heads=config.heads,
         kv=config.num_kv_heads,
+        head_dim=config.head_dim,
         mode=config.attention_mode,
         vocab=len(config.vocab),
     )

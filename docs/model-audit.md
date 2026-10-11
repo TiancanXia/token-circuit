@@ -22,12 +22,13 @@ Final RMSNorm → last position → Unembedding → Softmax → Sample
 
 | Setting | Value |
 | --- | --- |
-| Hidden width | 8 |
-| Q heads / head width | 4 / 2 |
-| MHA / GQA KV heads | 4 / 2 |
-| FFN hidden width | 12 |
+| Model width `d_model` | 8 |
+| Query heads | 4 |
+| Per-head width `d_head = d_model / Q heads` | 2 |
+| KV heads: MHA / GQA | 4 / 2 |
+| FFN intermediate width `d_ff` | 12 |
 | MoE | 2 of 3 experts per token |
-| Vocabulary | Chinese 16; English 12 |
+| Vocabulary size | Chinese 16 tokens; English 12 tokens |
 | Context limit | 64 tokens |
 
 The generic `ModelConfig` defaults to 2 Q heads; the game config uses 4.

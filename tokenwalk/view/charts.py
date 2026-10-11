@@ -7,7 +7,7 @@ def result_for(s, index):
     return s.forward.results[index] if index < len(s.forward.results) else None
 
 
-def bars(p, x, y, values, width=160, height=31):
+def bars(p, x, y, values, width=160, height=31, **kw):
     if not values:
         p.text(x, y, p.tr("wait_compute"), 8, MUTED)
         return
@@ -21,6 +21,7 @@ def bars(p, x, y, values, width=160, height=31):
             max(1, step - 3),
             h,
             GOLD if v >= 0 else "#89b3c3",
+            **kw,
         )
 
 

@@ -40,7 +40,7 @@ H、C、L 会重新开始。Esc 根据当前界面关闭文档或定位面板、
 
 点击模块的说明按钮查看详细内容，阅读期间游戏暂停。
 
-在 Attention 中沿 token 连线查看匹配分数和注意力权重。点击 token 高亮连线，Q→KV 按钮切换 head。点击「模型说明」阅读公式与算例。
+Attention 各层地图中，点击 Q1–Q4 或按 N 查看不同 head；点击 token 高亮对应的分数和权重。点击「模型说明」阅读公式与算例。
 
 ![Attention 观察台](assets/showcase/attention-inspector.zh.png)
 

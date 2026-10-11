@@ -236,10 +236,23 @@ class ForwardPass:
         before = self.x[-1][:]
         weights = matrix(self.config.dim, self.config.dim, f"b{stage.block}out")
         self.x = [linear(row, weights) for row in self.x]
+        width = self.config.head_dim
+        contributions = [
+            linear(
+                before[start : start + width],
+                [row[start : start + width] for row in weights],
+            )
+            for start in range(0, self.config.dim, width)
+        ]
         return (
             self.x[-1],
             "attention branch",
-            {"input": before, "weights": weights, **self.attention_metadata()},
+            {
+                "input": before,
+                "weights": weights,
+                "head_contributions": contributions,
+                **self.attention_metadata(),
+            },
         )
 
     def residual(self, stage):

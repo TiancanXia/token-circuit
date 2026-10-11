@@ -30,9 +30,9 @@ class Painter:
             *self.point(x, y), *self.point(x + w, y + h), fill=color, outline="", **kw
         )
 
-    def oval(self, x, y, w, h, color):
+    def oval(self, x, y, w, h, color, **kw):
         self.c.create_oval(
-            *self.point(x, y), *self.point(x + w, y + h), fill=color, outline=""
+            *self.point(x, y), *self.point(x + w, y + h), fill=color, outline="", **kw
         )
 
     def poly(self, points, color):

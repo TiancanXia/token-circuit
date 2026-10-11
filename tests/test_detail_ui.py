@@ -116,7 +116,7 @@ class DetailInterfaceTests(unittest.TestCase):
         self.assertEqual(g.config.num_kv_heads,4)
         self.assertTrue(g.cache_enabled)
 
-    def test_cached_decode_shows_all_visible_instead_of_masking(self):
+    def test_cached_decode_skips_mask_and_draws_softmax_then_concat(self):
         g=self.g
         s=g.session
         s.start_fast_forward()
@@ -126,14 +126,28 @@ class DetailInterfaceTests(unittest.TestCase):
                 break
         g.jump_to(4)
         g.interact()
-        self.assertEqual(s.rooms.active.spec.nodes[2],'Causal mask')
+        self.assertEqual(
+            tuple(s.checkpoint_title(cp.index) for cp in s.room_checkpoints),
+            ('K / V', 'Scores', 'Softmax', 'Weighted sum', 'Concat'),
+        )
         self.assertFalse(any(s.rooms.active.result.details['traces'][0]['mask_applied']))
         for cp in s.room_checkpoints[:3]:
             s.x,s.y=cp.x,cp.y
             g.interact()
         texts=[g.canvas.itemcget(i,'text') for i in g.canvas.find_all() if g.canvas.type(i)=='text']
-        self.assertIn(s.tr('mask_bypass'),texts)
+        weights=s.rooms.active.result.details['traces'][0]['weights'][-1]
+        for weight in weights:
+            self.assertIn(f'{weight:.1%}',texts)
+        self.assertNotIn(s.tr('mask_bypass'),texts)
+        self.assertFalse(g.canvas.find_withtag('mask-cell'))
         self.assertFalse(g.canvas.find_withtag('mask-hidden'))
+        for cp in s.room_checkpoints[3:]:
+            s.x,s.y=cp.x,cp.y
+            g.interact()
+        texts=[g.canvas.itemcget(i,'text') for i in g.canvas.find_all() if g.canvas.type(i)=='text']
+        self.assertIn('Concat',texts)
+        self.assertIn(s.tr('brief.attention.5'),texts)
+        self.assertEqual(s.forward.next_index,5)
 
     def test_prefill_shows_actual_triangular_mask_and_correct_phase(self):
         g=self.g

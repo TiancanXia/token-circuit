@@ -22,12 +22,13 @@ Final RMSNorm → 最后位置 → Unembedding → Softmax → Sample
 
 | 配置 | 数值 |
 | --- | --- |
-| 隐藏维度 | 8 |
-| Q heads / head 维度 | 4 / 2 |
-| MHA / GQA 的 KV heads | 4 / 2 |
-| FFN 中间维度 | 12 |
+| 模型维度 `d_model` | 8 |
+| Query heads | 4 |
+| 每个 head 的维度 `d_head = d_model / Q heads` | 2 |
+| KV heads：MHA / GQA | 4 / 2 |
+| FFN 中间维度 `d_ff` | 12 |
 | MoE | 每个 token 从 3 个专家选 2 个 |
-| 词表 | 中文 16，英文 12 |
+| 词表大小 | 中文 16 tokens，英文 12 tokens |
 | 上下文上限 | 64 token |
 
 通用 `ModelConfig` 默认 2 个 Q head，游戏配置使用 4 个。

@@ -25,6 +25,9 @@ TEXTS = {
     "probe.head_hint": ("N · Q head {head}/{count}", "N · Q head {head}/{count}"),
     "probe.head": ("Q{head} → KV{kv}", "Q{head} → KV{kv}"),
     "probe.match": ("Attention scores", "Attention scores"),
+    "probe.weight": ("注意力权重", "Attention weights"),
+    "head_contribution": ("Head {n} 对输出的贡献", "Head {n} contribution"),
+    "all_heads_output": ("完整输出 · 所有 head", "Output · all heads"),
     "probe.query": ("Query {position} · {token}", "Query {position} · {token}"),
     "probe.pick": ("点击 token", "Click a token"),
     "probe.scores_note": ("Q 与每个 K 的匹配分数", "How closely Q matches each K"),
@@ -82,8 +85,8 @@ TEXTS = {
         "Paused while reading · scroll to explore · close to continue",
     ),
     "guide.context": (
-        "{blocks} 层 · {mode} {heads}Q/{kv}KV\n模型维度 {dim} · FFN {hidden} · 词表 {vocab}",
-        "{blocks} blocks · {mode} {heads}Q/{kv}KV\nModel width {dim} · FFN {hidden} · vocabulary {vocab}",
+        "{blocks} 层 · {mode} · {heads} 个 Q head / {kv} 个 KV head\n模型维度 d_model = {dim} · head 维度 d_head = {head_dim}\nFFN 中间维度 d_ff = {hidden} · 词表 {vocab} tokens",
+        "{blocks} blocks · {mode} · {heads} Q heads / {kv} KV heads\nModel width d_model = {dim} · head width d_head = {head_dim}\nFFN hidden width d_ff = {hidden} · vocabulary {vocab} tokens",
     ),
     "guide.section.context": ("模型参数", "Model parameters"),
     "guide.section.role": ("它做什么", "What it does"),
@@ -134,11 +137,17 @@ TEXTS = {
         "Join the results of all heads",
     ),
     "brief.project.0": ("查看已拼接的输入", "Inspect the packed input"),
-    "brief.project.1": ("混合特征通道", "Mix feature channels"),
-    "brief.project.2": ("下一站：残差相加", "Next: residual addition"),
+    "brief.project.1": (
+        "查看所选 head 经 W_o 的输出贡献",
+        "Selected head's contribution through W_o",
+    ),
+    "brief.project.2": (
+        "各 head 的贡献相加，得到完整输出",
+        "Sum head contributions to obtain the full output",
+    ),
     "head_groups": (
-        "{mode} · {q}Q / {kv}KV · 展示前 {shown} 个 Q head",
-        "{mode} · {q}Q / {kv}KV · showing first {shown} Q heads",
+        "{mode} · {q}Q / {kv}KV · Q{start}–Q{end}",
+        "{mode} · {q}Q / {kv}KV · Q{start}–Q{end}",
     ),
     "cache_stats": (
         "{phase} · 复用 {old} / 新增 {new} · 显示 {shown} 个",
@@ -162,8 +171,8 @@ TEXTS = {
         "Query rows × key columns · last {rows} rows / {keys} columns",
     ),
     "concat_shape": (
-        "{q} 个 Q head × {d} 维 = {total} 维 · 展示前 {shown} 个 head",
-        "{q} Q heads × {d} channels = {total} channels · first {shown} heads shown",
+        "{q} 个 Q head × {d} 维 = {total} 维 · Head {start}–{end}",
+        "{q} Q heads × {d} channels = {total} channels · Head {start}–{end}",
     ),
     "await_attention_stage": (
         "当前节点 {title} 尚未处理 · E 深入",

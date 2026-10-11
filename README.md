@@ -40,7 +40,7 @@ H, C and L restart the journey. Esc closes an open document or picker, leaves fu
 
 Click a module's explanation button for details. Reading pauses the game.
 
-In Attention, follow the token connections to see matching scores and attention weights. Click a token to highlight its connection; Q→KV changes the head. Open the model guide for formulas and examples.
+In Attention, click Q1–Q4 or press N to inspect another head in any room. Click tokens to highlight their scores and weights. Open the model guide for formulas and examples.
 
 ![Attention inspector](assets/showcase/attention-inspector.en.png)
 
