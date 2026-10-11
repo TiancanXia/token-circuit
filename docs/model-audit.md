@@ -1,6 +1,6 @@
 # Model computation
 
-[English](model-audit.md) | [简体中文](model-audit.zh-CN.md) · [Documentation](README.md)
+[English](model-audit.md) | [简体中文](model-audit.zh-CN.md) · [Home](../README.md)
 
 A two-block pre-norm causal decoder with fixed, untrained weights. Block 1 uses Dense FFN; block 2 uses MoE.
 

@@ -50,9 +50,8 @@ H、C、L 会重新开始。Esc 根据当前界面关闭文档或定位面板、
 
 ## 文档
 
-- [玩家指南](docs/player-guide.zh-CN.md)
-- [开发与贡献](CONTRIBUTING.zh-CN.md)
-- [文档目录](docs/README.zh-CN.md)
+- 玩家：[玩家指南](docs/player-guide.zh-CN.md) — 初次旅程、操作与常见问题。
+- 开发者：[开发与贡献](CONTRIBUTING.zh-CN.md) · [代码结构](docs/architecture.zh-CN.md) · [模型计算](docs/model-audit.zh-CN.md)
 - [更新日志](CHANGELOG.md) · [问题反馈](https://github.com/TiancanXia/token-circuit/issues)
 
 ## 许可

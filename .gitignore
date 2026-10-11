@@ -25,7 +25,7 @@ Thumbs.db
 *.log
 AGENTS.md
 
-# Historical plans and generated previews (public docs stay tracked)
+# Private planning notes and generated previews (public docs stay tracked)
 docs/archive/
 docs/superpowers/
 assets/previews/

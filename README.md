@@ -50,9 +50,8 @@ The game computes a small Transformer with fixed, untrained weights. The sentenc
 
 ## Documentation
 
-- [Player guide](docs/player-guide.md)
-- [Development and contributing](CONTRIBUTING.md)
-- [Documentation index](docs/README.md)
+- Players: [Player guide](docs/player-guide.md) — first journey, controls and help.
+- Developers: [Contributing](CONTRIBUTING.md) · [Code structure](docs/architecture.md) · [Model computation](docs/model-audit.md)
 - [Changelog](CHANGELOG.md) · [Report an issue](https://github.com/TiancanXia/token-circuit/issues)
 
 ## License

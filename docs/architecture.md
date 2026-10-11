@@ -1,6 +1,6 @@
 # Code structure
 
-[English](architecture.md) | [简体中文](architecture.zh-CN.md) · [Documentation](README.md)
+[English](architecture.md) | [简体中文](architecture.zh-CN.md) · [Home](../README.md)
 
 ## Files
 
@@ -39,6 +39,15 @@ Opening the handbook or losing window focus pauses progression. The handbook als
 `ForwardPass.preview` reads a completed result or calculates a detached preview of the current stage. It does not change the executor, random state or cache. The final child checkpoint commits the stage once. M returns one level; F returns to the world route before continuing.
 
 Stage diagnostics are stored in `Result.details`. Paired interface labels are in `i18n.py`; detailed topics and aliases are in `content/guide.py`.
+
+### Adding an interior
+
+1. Register checkpoints in `simulation/rooms.py` as a `RoomSpec` for the operation.
+2. Store any new numerical diagnostics in the operation's `Result.details`.
+3. Register a drawer in `view/detail_views.py` that reads the selected result.
+4. Add paired labels in `i18n.py` and a topic or alias in `content/guide.py`.
+
+The shared floor, movement and input handlers handle the new interior. Verify entry, completion, return and revisits in both languages.
 
 ## Cache and output
 

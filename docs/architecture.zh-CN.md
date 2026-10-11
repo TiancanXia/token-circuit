@@ -1,6 +1,6 @@
 # 代码结构
 
-[English](architecture.md) | [简体中文](architecture.zh-CN.md) · [文档目录](README.zh-CN.md)
+[English](architecture.md) | [简体中文](architecture.zh-CN.md) · [首页](../README.zh-CN.md)
 
 ## 文件
 
@@ -39,6 +39,15 @@ Sample 后，小人从 Output 转移到 Embedding。1.4 秒动画结束后，句
 `ForwardPass.preview` 读取已完成结果，或对当前阶段进行脱离真实状态的预计算，不改变执行器、随机状态或缓存。子模块最后一个检查点只提交一次阶段。M 返回一级，F 先返回大地图路线再继续。
 
 阶段诊断存于 `Result.details`。成对界面标签在 `i18n.py`，详细说明及别名在 `content/guide.py`。
+
+### 添加内部地图
+
+1. 在 `simulation/rooms.py` 中为算子注册 `RoomSpec` 检查点。
+2. 将新增数值诊断存入该算子的 `Result.details`。
+3. 在 `view/detail_views.py` 注册读取所选结果的绘制函数。
+4. 在 `i18n.py` 添加双语标签，在 `content/guide.py` 添加主题或别名。
+
+新地图复用公共地板、移动和输入处理。检查两种语言的进入、完成、返回与重复访问。
 
 ## 缓存与输出
 

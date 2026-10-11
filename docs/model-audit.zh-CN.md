@@ -1,6 +1,6 @@
 # 模型计算
 
-[English](model-audit.md) | [简体中文](model-audit.zh-CN.md) · [文档目录](README.zh-CN.md)
+[English](model-audit.md) | [简体中文](model-audit.zh-CN.md) · [首页](../README.zh-CN.md)
 
 两层 pre-norm causal decoder，参数固定且未训练。第一层使用 Dense FFN，第二层使用 MoE。
 
