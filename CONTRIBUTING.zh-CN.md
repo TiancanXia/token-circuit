@@ -40,6 +40,8 @@ python game.py
 
 试玩受影响的操作并检查两种语言。模型修改还需核对缓存与完整前缀计算是否一致。
 
+重新生成公式图片时，安装带 dvipng 的 LaTeX，修改 `tokenwalk/content/attention_math.md` 中的 TeX 块，然后运行 `python -m tools.build_attention_assets`。试玩无需安装 TeX。
+
 ```sh
 git diff --check
 git diff

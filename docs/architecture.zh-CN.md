@@ -48,7 +48,7 @@ Attention 结果包含头映射、query 位置、计算阶段与逐行 mask 诊�
 
 `view/output.py` 分开 logits 与概率。`output_summary` 选择 Top 7 并累计省略概率，不重新归一化。默认句子按自身顺序推进，`Session(guided=False)` 使用实际抽样。
 
-Attention 观察状态位于 `simulation/attention_probe.py`，视图只读已存诊断。详细说明在 `content/attention_guide.py`。`view/formulas.py` 从 `assets/formulas` 读取公式 PNG；安装开发工具后可用 `python -m tools.build_attention_assets` 重新生成。
+Attention 观察状态位于 `simulation/attention_probe.py`，视图只读已存诊断。`RoomSpec.label_keys` 提供独立于算子标识的中英文节点名。详细说明在 `content/attention_guide.py`。TeX 公式写在 `content/attention_math.md` 的 `$$` 块中，`python -m tools.build_attention_assets` 使用 LaTeX 和 dvipng 编译。`view/formulas.py` 从 `assets/formulas` 读取打包的 PNG。
 
 ## 检查
 

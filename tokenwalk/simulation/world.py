@@ -92,7 +92,12 @@ class Session:
 
     def checkpoint_title(self, index):
         if self.scene == "detail":
-            return self.rooms.active.spec.nodes[index]
+            spec = self.rooms.active.spec
+            return (
+                self.tr(spec.label_keys[index])
+                if spec.label_keys
+                else spec.nodes[index]
+            )
         stage = self.forward.stages[index]
         return "Next token" if self.guided and stage.kind == "sample" else stage.title
 

@@ -45,7 +45,17 @@ def draw_room(p, s):
             p.rect(cp.x + dx, cp.y - 12, 6, 8, "#547d8b")
         p.line([(cp.x - 29, cp.y + 9), (cp.x + 29, cp.y + 9)], color)
         title = s.checkpoint_title(cp.index)
-        p.fit_text(cp.x, cp.y - 51, title, 115, 14, TEXT, anchor="n", mono=True)
+        readable = s.scene == "detail" and bool(s.rooms.active.spec.label_keys)
+        p.fit_text(
+            cp.x,
+            cp.y - 51,
+            title,
+            100 if readable else 115,
+            17 if readable else 14,
+            TEXT,
+            anchor="n",
+            mono=not readable,
+        )
         child = s.scene == "micro" and s.forward.stages[cp.index].kind in ROOMS
         p.text(
             cp.x,

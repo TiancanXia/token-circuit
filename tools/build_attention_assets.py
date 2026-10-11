@@ -1,41 +1,95 @@
-"""Generate packaged math images; Matplotlib is only a developer dependency."""
+"""Compile Markdown math blocks with LaTeX into packaged transparent PNGs."""
 
 from pathlib import Path
-import os
+import re
+import shutil
+import subprocess
 
-os.environ.setdefault(
-    "MPLCONFIGDIR",
-    str(Path(__file__).resolve().parents[1] / ".local" / "formula-cache"),
-)
-import matplotlib
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "tokenwalk" / "content" / "attention_math.md"
 
-matplotlib.use("Agg")
-from matplotlib import pyplot as plt
 
-FORMULAS = (
-    r"s_j=\frac{q\cdot k_j}{\sqrt{d_h}}",
-    r"p_j=\frac{\exp(s_j)}{\sum_{\ell\leq t}\exp(s_\ell)},\quad p_j=0\ (j>t)",
-    r"o_h=\sum_{j\leq t}p_jv_j,\qquad O=\mathrm{Concat}(o_1,\ldots,o_H)W_o^T",
-)
+def extract_math(markdown):
+    return re.findall(r"(?m)^\$\$[ \t]*\n([\s\S]*?)\n\$\$[ \t]*$", markdown)
+
+
+def latex_document(formulas):
+    pages = "\n\\newpage\n".join(r"\[" + formula + r"\]" for formula in formulas)
+    return (
+        r"\documentclass[12pt]{article}"
+        "\n"
+        r"\usepackage{amsmath,amssymb}"
+        "\n"
+        r"\pagestyle{empty}"
+        "\n"
+        r"\setlength{\textwidth}{24cm}"
+        "\n"
+        r"\begin{document}"
+        "\n" + pages + "\n" + r"\end{document}"
+        "\n"
+    )
+
+
+def run(command, directory):
+    result = subprocess.run(
+        command, cwd=directory, capture_output=True, text=True, timeout=60
+    )
+    if result.returncode:
+        raise RuntimeError((result.stdout + result.stderr)[-4000:])
 
 
 def main():
-    output = Path(__file__).resolve().parents[1] / "assets" / "formulas"
+    # Pillow and TeX are build tools; the game only loads the resulting PNGs.
+    from PIL import Image
+
+    latex, dvipng = shutil.which("latex"), shutil.which("dvipng")
+    if not latex or not dvipng:
+        raise SystemExit("Install LaTeX and dvipng, and add them to PATH.")
+    formulas = extract_math(SOURCE.read_text(encoding="utf-8"))
+    if len(formulas) != 3:
+        raise ValueError("Attention requires exactly three Markdown math blocks.")
+    build = ROOT / ".local" / "formula-build"
+    output = ROOT / "assets" / "formulas"
+    build.mkdir(parents=True, exist_ok=True)
     output.mkdir(parents=True, exist_ok=True)
-    plt.rcParams["mathtext.fontset"] = "cm"
-    for index, formula in enumerate(FORMULAS):
-        fig = plt.figure(figsize=(4.4, 0.68), dpi=200)
-        fig.text(
-            0.02,
-            0.5,
-            "$" + formula + "$",
-            color="#a3cfdd",
-            fontsize=17 if index == 0 else 13,
-            va="center",
-        )
-        fig.savefig(output / f"attention-{index}.png", transparent=True)
-        plt.close(fig)
-    print("Three attention formula assets generated.")
+    (build / "attention.tex").write_text(latex_document(formulas), encoding="utf-8")
+    run(
+        [
+            latex,
+            "-no-shell-escape",
+            "-interaction=nonstopmode",
+            "-halt-on-error",
+            "attention.tex",
+        ],
+        build,
+    )
+    run(
+        [
+            dvipng,
+            "-D",
+            "240",
+            "-T",
+            "tight",
+            "-bg",
+            "Transparent",
+            "-fg",
+            "rgb 0.64 0.81 0.87",
+            "-o",
+            "raw-%d.png",
+            "attention.dvi",
+        ],
+        build,
+    )
+    for index in range(len(formulas)):
+        with Image.open(build / f"raw-{index + 1}.png") as source:
+            image = source.convert("RGBA")
+        if image.width > 848:
+            height = round(image.height * 848 / image.width)
+            image = image.resize((848, height), Image.Resampling.LANCZOS)
+        asset = Image.new("RGBA", (880, image.height + 32))
+        asset.paste(image, (16, 16))
+        asset.save(output / f"attention-{index}.png")
+    print("Compiled three TeX formulas from attention_math.md.")
 
 
 if __name__ == "__main__":

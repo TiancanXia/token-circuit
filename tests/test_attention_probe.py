@@ -124,7 +124,7 @@ class ProbeInterfaceTests(unittest.TestCase):
                     i
                     for i in g.canvas.find_all()
                     if g.canvas.type(i) == "text"
-                    and g.canvas.itemcget(i, "text").startswith("N / Q")
+                    and "head-indicator" in g.canvas.gettags(i)
                 )
                 a = g.canvas.bbox(head)
                 for i in g.canvas.find_withtag("attention-choice"):

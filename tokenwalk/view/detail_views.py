@@ -159,19 +159,13 @@ def attend(p, s, node, data, head):
                 11,
                 BLUE,
             )
-            vector(p, 48, 209, scores[-9:], "scores unchanged / all keys visible")
+            vector(p, 48, 209, scores[-9:], p.tr("probe.match"))
             p.fit_text(48, 281, p.tr("mask_bypass"), 552, 14, TEXT)
         return
     weights = trace["weights"][-1]
     start = max(0, len(weights) - 9)
     values = trace["scores"][-1] if node == 1 else weights
-    label = (
-        "Q Kᵀ / √d_head"
-        if node == 1
-        else "softmax(scores)"
-        if node == 3
-        else "p (all keys)"
-    )
+    label = p.tr("probe.match" if node == 1 else "probe.weights")
     vector(p, 48, 202, values[start:], label)
     p.fit_text(
         48,
@@ -201,8 +195,6 @@ def attend(p, s, node, data, head):
             GOLD,
             mono=True,
         )
-    elif node == 3:
-        p.text(48, 278, f"Σ p = {sum(weights):.6f}", 16, GOLD, mono=True)
     else:
         output = trace["outputs"][-1]
         ks = trace["kv_head"] * c.head_dim
@@ -260,17 +252,20 @@ def draw_detail(p, s):
     visit = s.rooms.active
     cp = s.near_checkpoint or s.next_checkpoint or visit.spec.checkpoints()[-1]
     node = cp.index
-    p.fit_text(48, 153, visit.spec.nodes[node], 370, 18, GOLD, mono=True)
+    p.fit_text(48, 151, s.checkpoint_title(node), 400, 22, GOLD)
     c = s.forward.config
     kv = c.kv_head_for(visit.head)
     p.text(
         600,
         160,
-        f"N / Q{visit.head + 1} → KV{kv + 1}",
+        p.tr("probe.head_hint", head=visit.head + 1, count=c.heads)
+        if visit.spec.kind == "attention"
+        else f"N / Q{visit.head + 1} → KV{kv + 1}",
         11,
         BLUE,
         anchor="ne",
-        mono=True,
+        mono=visit.spec.kind != "attention",
+        tags="head-indicator",
     )
     if node > visit.progress:
         p.text(48, 218, p.tr("detail_order"), 12, MUTED)

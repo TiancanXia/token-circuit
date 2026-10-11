@@ -129,7 +129,7 @@ class DetailInterfaceTests(unittest.TestCase):
             s.x,s.y=cp.x,cp.y
             g.interact()
         texts=[g.canvas.itemcget(i,'text') for i in g.canvas.find_all() if g.canvas.type(i)=='text']
-        self.assertTrue(any('无需构造' in t for t in texts),texts)
+        self.assertIn(s.tr('mask_bypass'),texts)
         self.assertFalse(g.canvas.find_withtag('mask-hidden'))
 
     def test_prefill_shows_actual_triangular_mask_and_correct_phase(self):

@@ -51,9 +51,13 @@ def capture_guide(game, name):
     )
     draw.text(
         (x + 9, y + 2),
-        guide.selector.get() + "   ▾",
+        guide.selector.get(),
         font=preview_font(False, 16),
         fill="#e4dfca",
+    )
+    right = x + guide.selector.winfo_width() - 12
+    draw.polygon(
+        [(right - 4, y + 9), (right + 4, y + 9), (right, y + 13)], fill="#d9bb78"
     )
     text = guide.text
     x, y = point(text)
@@ -133,6 +137,11 @@ def main():
             game.guide.window.transient("")
             game.guide.window.deiconify()
             capture_guide(game, f"preview-guide-{language}.png")
+            at = game.guide.text.search(
+                "符号与公式" if language == "zh" else "Symbols and formulas", "1.0"
+            )
+            game.guide.text.yview(at)
+            capture_guide(game, f"preview-guide-formulas-{language}.png")
             game.guide.text.yview_moveto(1.0)
             capture_guide(game, f"preview-guide-bottom-{language}.png")
             game.guide.window.geometry("620x460")

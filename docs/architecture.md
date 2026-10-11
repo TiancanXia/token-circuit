@@ -48,7 +48,7 @@ Attention results contain head mapping, query positions, phase and per-row mask 
 
 `view/output.py` separates logits from probabilities. `output_summary` selects Top 7 and sums omitted probability without renormalizing. The default sentence follows its own sequence; `Session(guided=False)` uses the actual sample.
 
-Attention inspection state lives in `simulation/attention_probe.py`; its view reads stored traces. Detailed Attention content is in `content/attention_guide.py`. Formula PNGs are loaded by `view/formulas.py` from `assets/formulas`; `python -m tools.build_attention_assets` regenerates them using the optional developer tools.
+Attention inspection state lives in `simulation/attention_probe.py`; its view reads stored traces. `RoomSpec.label_keys` provides translated checkpoint names independently of operation identifiers. Detailed content is in `content/attention_guide.py`. TeX formulas are authored as `$$` blocks in `content/attention_math.md`; `python -m tools.build_attention_assets` compiles them with LaTeX and dvipng. `view/formulas.py` loads the packaged PNGs from `assets/formulas`.
 
 ## Checks
 

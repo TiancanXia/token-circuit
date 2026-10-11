@@ -40,6 +40,8 @@ python game.py
 
 Playtest affected controls and both languages. Model changes should also check cached/full-prefix equivalence.
 
+To rebuild formula images, install LaTeX with dvipng, then run `python -m tools.build_attention_assets`. Edit the TeX blocks in `tokenwalk/content/attention_math.md`. TeX is not needed to play.
+
 ```sh
 git diff --check
 git diff

@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Interactive Attention query/key/head inspection and token contributions.
-- Layered bilingual Attention explanation with packaged formula images.
+- Readable Attention checkpoints and bilingual explanations with TeX formulas compiled from Markdown.
 
 ## 0.1.0 — 2026-10-09
 

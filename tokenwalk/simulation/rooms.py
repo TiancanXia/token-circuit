@@ -8,6 +8,7 @@ from .maps import Checkpoint
 class RoomSpec:
     kind: str
     nodes: tuple
+    label_keys: tuple = ()
 
     def checkpoints(self):
         count = len(self.nodes)
@@ -21,7 +22,11 @@ class RoomSpec:
 
 # Add a specification and a view drawer to introduce another module interior.
 ROOMS = {
-    kind: RoomSpec(kind, nodes)
+    kind: RoomSpec(
+        kind,
+        nodes,
+        tuple(f"step.{kind}.{i}" for i in range(len(nodes))),
+    )
     for kind, nodes in (
         ("qkv", ("X", "Q = X Wqᵀ", "K = X Wkᵀ", "V = X Wvᵀ", "Heads")),
         ("rope", ("Position", "Rotate Q/K", "Ready K/V")),
@@ -38,13 +43,15 @@ def specification(result, config):
     """Refine labels from real diagnostics; checkpoint count/order stays stable."""
     base = ROOMS[result.stage.kind]
     nodes = list(base.nodes)
+    labels = list(base.label_keys)
     if base.kind == "qkv":
         nodes[4] = config.attention_mode + " heads"
     elif base.kind == "attention" and not any(
         result.details["traces"][0]["mask_applied"]
     ):
         nodes[2] = "All visible"
-    return RoomSpec(base.kind, tuple(nodes))
+        labels[2] = "step.attention.visible"
+    return RoomSpec(base.kind, tuple(nodes), tuple(labels))
 
 
 @dataclass
@@ -110,5 +117,7 @@ class Rooms:
             session._execute_step(visit.index)
             visit.result = session.forward.results[visit.index]
         else:
-            session.say(session.tr("detail_step", title=visit.spec.nodes[cp.index]))
+            session.say(
+                session.tr("detail_step", title=session.checkpoint_title(cp.index))
+            )
         return True

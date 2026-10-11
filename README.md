@@ -40,7 +40,7 @@ H, C and L restart the journey. Esc closes an open document or picker, leaves fu
 
 Click a module's explanation button for details. Reading pauses the game.
 
-In Attention, click a token to inspect its score, probability and contribution. Query arrows change the inspected position; Q→KV changes the head.
+In Attention, click a token to inspect its score, probability and contribution. Query arrows change the inspected position; the head button changes the head.
 
 ![Attention inspector](assets/showcase/attention-inspector.en.png)
 

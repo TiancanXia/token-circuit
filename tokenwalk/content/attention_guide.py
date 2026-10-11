@@ -1,5 +1,11 @@
 """Layered bilingual attention explanation; only reads configuration."""
 
+FORMULA_TITLES = (
+    ("匹配分数", "Match score"),
+    ("可见位置的概率", "Causal probabilities"),
+    ("汇聚内容与输出投影", "Gather and project"),
+)
+
 SECTIONS = (
     (
         ("直觉", "Intuition"),
@@ -11,15 +17,15 @@ SECTIONS = (
     (
         ("图解与操作", "Diagram and controls"),
         (
-            "用查询旁的 ‹ › 选择位置，点击 token 卡片观察对应的 score、概率、V 与 p×V。卡片角标蓝色表示历史缓存，金色表示本轮计算；高亮强调所选位置，不可见的未来位置权重为零。三个向量条分别显示所选 V、它的贡献与完整 head 输出；各条共用尺度，精确数值见下方。点击 Q→KV 按钮或在子地图按 N 切换 head。长前缀用卡片上方的 ‹ › 翻页，输出仍包含所有位置。",
-            "Use ‹ › beside Query to choose a position. Click a token card to inspect its score, probability, V and p×V. Blue corner markers identify cached history and gold markers identify new computation; highlighting identifies selection; masked future positions have zero weight. Vector strips show selected V, its contribution and the complete head output; strips share one scale, with exact channel-1 values below. Click Q→KV or press N in the child room to inspect another head. Page through long prefixes using the upper ‹ ›; output still includes every position.",
+            "用查询旁的 ‹ › 选择位置，点击 token 卡片观察对应的 score、概率、V 与 p×V。卡片角标蓝色表示历史缓存，金色表示本轮计算；高亮强调所选位置，不可见的未来位置权重为零。“内容、贡献、汇聚结果”依次显示所选 V、它的加权贡献和完整 head 输出。向量条共用尺度；每张卡片的数字是第一个通道的值。点击头按钮或在子地图按 N 切换 head。长前缀用卡片上方的 ‹ › 翻页，输出仍包含所有位置。",
+            "Use ‹ › beside Query to choose a position. Click a token card to inspect its score, probability, V and p×V. Blue corner markers identify cached history and gold markers identify new computation; highlighting identifies selection; masked future positions have zero weight. Content, Contribution and Result show the selected V, its weighted contribution and the complete head output. Strips share one scale; each number is the first channel. Click the head button or press N in the child room to inspect another head. Page through long prefixes using the upper ‹ ›; output still includes every position.",
         ),
     ),
     (
         ("符号与公式", "Symbols and formulas"),
         (
-            "t 为 query 位置，j 为 key 位置，d_h 为 head 维度。q、k_j、v_j 都是 d_h 维向量；softmax 沿 key 位置计算，可见位置的概率和为 1。图中的 score 是 mask 前的原始分数，不可见位置在 softmax 前设为 −∞。除以 √d_h 可缓和点积随维度增长的尺度。",
-            "t is the query position, j the key position and d_h the head width. q, k_j and v_j have d_h channels. Softmax runs across key positions; visible probabilities sum to one. The displayed score is the raw score before masking. Future scores become −∞ before softmax. Dividing by √d_h moderates the dot-product scale as width grows.",
+            "t 为 query 位置，j 为 key 位置，h 为查询头，g(h) 为它读取的键值头。q、k、v 的通道数等于 head 维度；softmax 沿 key 位置计算，可见位置的概率和为 1。图中的匹配分数尚未经过屏蔽，未来位置在 softmax 前设为 −∞。点积除以 head 维度的平方根，可缓和分数随维度增长的尺度。o 是一个头的汇聚结果；H 个头拼接后，经 W_o 投影得到 y。",
+            "t is the query position, j the key position, h the query head and g(h) its key/value head. q, k and v have the width of one head. Softmax runs across key positions; visible probabilities sum to one. Displayed match scores are unmasked; future scores become −∞ before softmax. Dividing the dot product by the square root of head width moderates its scale. o is one head's result; concatenating H heads and projecting through W_o produces y.",
         ),
     ),
     (

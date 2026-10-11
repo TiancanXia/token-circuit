@@ -30,7 +30,7 @@ Click an explanation button to read a module document. Reading pauses the game; 
 
 ## Attention inspector
 
-At Head attention / Softmax, click token cards to inspect contributions. Query arrows select available query rows; Q→KV or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
+At Head attention / Weight, click token cards to inspect contributions. Query arrows select available query rows; the head button or N changes the head. Long prefixes have page arrows. Masked future positions contribute zero. These controls only change the view, not calculation progress. The explanation button opens formulas and worked examples.
 
 ## Questions
 
